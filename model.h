@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#ifndef model
+#define model
 
 typedef enum {
 	Student,
@@ -24,5 +26,7 @@ typedef struct {
 	char* author;
 	int id;
 	Category category;
-	User borrower;
+	User* borrower;
 } Book;
+
+#endif
