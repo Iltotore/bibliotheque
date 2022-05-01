@@ -1,11 +1,17 @@
+.DEFAULT_GOAL:=app
 
-BUILD_DIR=build
-
-create_build_dir:
-	mkdir -p ${BUILD_DIR}
-	
 clean:
-	rm -r ${BUILD_DIR}
+	@rm -f *.o
+	@rm -f app
 
-%.o: %.c %.h create_build_dir
-	gcc -c -o ${BUILD_DIR}/$@ $<
+gui.c: model.h util.c
+
+main.c: model.h gui.c
+
+app: main.c
+	@echo "Building application..."
+	@gcc main.c -o app
+
+run: app
+	@echo "Running application..."
+	@./app
