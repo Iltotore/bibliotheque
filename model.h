@@ -29,4 +29,13 @@ typedef struct {
 	User* borrower;
 } Book;
 
+typedef enum {
+	TITLE,
+	AUTHOR,
+	ID,
+	CATEGORY,
+	BORROWER,
+	NO_FIELD
+} Field;
+
 #endif
