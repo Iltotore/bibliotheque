@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "gui.c"
 #include "model.h"
+#include "gui.h"
 
 int main() {
 

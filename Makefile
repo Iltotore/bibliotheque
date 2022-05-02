@@ -1,17 +1,18 @@
-.DEFAULT_GOAL:=app
+EXECUTABLE=app.out
+
+.DEFAULT_GOAL:=$(EXECUTABLE)
+
+SRCS:=$(wildcard *.c)
 
 clean:
 	@rm -f *.o
-	@rm -f app
+	@rm -f *.h.gch
+	@rm -f $(EXECUTABLE)
 
-gui.c: model.h util.c
-
-main.c: model.h gui.c
-
-app: main.c
+$(EXECUTABLE): $(SRCS)
 	@echo "Building application..."
-	@gcc main.c -o app
+	@gcc $(SRCS) -o $(EXECUTABLE)
 
-run: app
+run: $(EXECUTABLE)
 	@echo "Running application..."
-	@./app
+	@./$(EXECUTABLE)

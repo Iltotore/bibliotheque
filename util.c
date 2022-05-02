@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 void* safeMalloc(size_t size) {
   void* pointer = malloc(size);

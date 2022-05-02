@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "model.h"
-#include "util.c"
+#include "gui.h"
+#include "util.h"
 
 char* categoryToString(Category category) {
   switch (category) {
