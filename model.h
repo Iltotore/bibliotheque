@@ -3,8 +3,8 @@
 #define model
 
 typedef enum {
-	Student,
-	Teacher
+	STUDENT,
+	TEACHER
 } Role;
 
 typedef struct {
@@ -15,10 +15,10 @@ typedef struct {
 } User;
 
 typedef enum {
-	Sciences,
-	Literature,
-	Fiction,
-	GeneralKnowledge
+	SCIENCES,
+	LITERATURE,
+	FICTION,
+	GENERAL_KNOWLEDGE
 } Category;
 
 typedef struct {
