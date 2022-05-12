@@ -7,6 +7,7 @@ void* safeMalloc(size_t size) {
     printf("Memory allocation error.\n");
     exit(-1);
   }
+  return pointer;
 }
 
 int lengthOfInt(int n) {
