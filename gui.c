@@ -1,20 +1,25 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include "model.h"
 #include "gui.h"
 #include "util.h"
 
+#define FOCUS_STYLE "\x1b[1m"
+#define FOCUS_RESET "\x1b[0m"
+
 char* categoryToString(Category category) {
   switch (category) {
-    case Sciences: return "Sciences";
-    case Literature: return "Litérature";
-    case Fiction: return "Fiction";
-    case GeneralKnowledge: return "Culture Générale";
+    case SCIENCES: return "Sciences";
+    case LITERATURE: return "Litérature";
+    case FICTION: return "Fiction";
+    case GENERAL_KNOWLEDGE: return "Culture Générale";
   }
 }
 
 char* completeWithString(char* base, int length, char* str) {
   int currentLength = strlen(base);
+  if(currentLength > length) return base;
   char* result = safeMalloc(sizeof(char)*length);
   strcat(result, base);
 
@@ -25,7 +30,17 @@ char* completeWithString(char* base, int length, char* str) {
   return result;
 }
 
-void showBooks(Book books[], int length) {
+char* focus(char* str, bool focused) {
+  if(focused) {
+    char* result = safeMalloc(sizeof(char)*(strlen(str)+strlen(FOCUS_STYLE)+strlen(FOCUS_RESET)));
+    strcat(result, FOCUS_STYLE);
+    strcat(result, str);
+    strcat(result, FOCUS_RESET);
+    return result;
+  } else return str;
+}
+
+void showBooks(Book books[], int length, Field focused) {
   int max[5] = {5, 6, 2, 9, 12};
   for(int i = 0; i < length; i++) {
     Book book = books[i];
@@ -40,11 +55,11 @@ void showBooks(Book books[], int length) {
   printf("%s\n", completeWithString("", totalLength+1, "-"));
   printf(
     "|%s|%s|%s|%s|%s|\n",
-    completeWithString("Titre", max[0], " "),
-    completeWithString("Auteur", max[1], " "),
-    completeWithString("ID", max[2], " "),
-    completeWithString("Catégorie", max[3], " "),
-    completeWithString("Emprunté par", max[4], " ")
+    focus(completeWithString("Titre", max[0], " "), focused == TITLE),
+    focus(completeWithString("Auteur", max[1], " "), focused == AUTHOR),
+    focus(completeWithString("ID", max[2], " "), focused == ID),
+    focus(completeWithString("Catégorie", max[3], " "), focused == CATEGORY),
+    focus(completeWithString("Emprunté par", max[4], " "), focused == BORROWER)
   );
   printf("%s\n", completeWithString("", totalLength+1, "-"));
 
@@ -54,13 +69,25 @@ void showBooks(Book books[], int length) {
     sprintf(bookId, "%d", book.id);
     printf(
       "|%s|%s|%s|%s|%s|\n",
-      completeWithString(book.title, max[0], " "),
-      completeWithString(book.author, max[1], " "),
-      completeWithString(bookId, max[2], " "),
-      completeWithString(categoryToString(book.category), max[3], " "),
-      completeWithString(book.borrower == NULL ? "" : book.borrower->login, max[4], " ")
+      focus(completeWithString(book.title, max[0], " "), focused == TITLE),
+      focus(completeWithString(book.author, max[1], " "), focused == AUTHOR),
+      focus(completeWithString(bookId, max[2], " "), focused == ID),
+      focus(completeWithString(categoryToString(book.category), max[3], " "), focused == CATEGORY),
+      focus(completeWithString(book.borrower == NULL ? "" : book.borrower->login, max[4], " "), focused == BORROWER)
     );
   }
 
     printf("%s\n", completeWithString("", totalLength+1, "-"));
+}
+
+int askInt(char* message, char* choices[], int length) {
+  printf("%s\n", message);
+  for(int i = 0; i < length; i++) printf("[%d]: %s\n", i+1, choices[i]);
+  int answer;
+  scanf("%d", &answer);
+  while (answer < 1 || answer > length) {
+    printf("Veuillez saisir un nombre entre 1 et %d\n", length);
+    scanf("%d", &answer);
+  }
+  return answer-1;
 }

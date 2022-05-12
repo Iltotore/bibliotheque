@@ -3,6 +3,7 @@
 #include <time.h>
 #include "model.h"
 #include "gui.h"
+#include "util.h"
 
 int main() {
 
@@ -12,7 +13,7 @@ int main() {
   dummy.title = "The Scala Cookbook";
   dummy.author = "Alvin Alexander";
   dummy.id = 0;
-  dummy.category = Sciences;
+  dummy.category = SCIENCES;
   dummy.borrower = NULL;
 
   Book books[5];
@@ -21,6 +22,7 @@ int main() {
     books[i].id = rand();
   }
 
-  showBooks(books, 5);
+  showBooks(books, 5, BORROWER);
+
   return 0;
 }
