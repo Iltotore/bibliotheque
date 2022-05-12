@@ -22,7 +22,7 @@ int main() {
     books[i].id = rand();
   }
 
-  showBooks(books, 5, BORROWER);
+  showBooks(books, 5, NO_FIELD);
 
   return 0;
 }

@@ -2,11 +2,13 @@
 #ifndef model
 #define model
 
+//The possible roles of a user.
 typedef enum {
 	STUDENT,
 	TEACHER
 } Role;
 
+//A registered user with its login, password, role and whether they are blacklisted.
 typedef struct {
 	char* login;
 	char* password;
@@ -14,6 +16,7 @@ typedef struct {
 	bool blacklisted;
 } User;
 
+//The possible book categories.
 typedef enum {
 	SCIENCES,
 	LITERATURE,
@@ -21,6 +24,7 @@ typedef enum {
 	GENERAL_KNOWLEDGE
 } Category;
 
+//A stored book containing a title, an author, an id (must be unique), a category and a borrower (nullable).
 typedef struct {
 	char* title;
 	char* author;
@@ -29,6 +33,7 @@ typedef struct {
 	User* borrower;
 } Book;
 
+//Represent each field of a Book.
 typedef enum {
 	TITLE,
 	AUTHOR,
