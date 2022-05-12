@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "io.h"
+#include "model.h"
 
 void saveBook(Book a,FILE* text){
   char* username;
