@@ -9,3 +9,14 @@ int categoryToInt(Category a){
     case GENERAL_KNOWLEDGE: return 3;
   }
 }
+Category intToCategory(int a){
+  switch(a) {
+    case 0: return SCIENCES;
+    case 1: return LITERATURE;
+    case 2: return FICTION;
+    case 3: return GENERAL_KNOWLEDGE;
+  }
+}
+
+User* getUser( char* login){
+	}
