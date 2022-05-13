@@ -1,5 +1,5 @@
 #include "model.h"
-
+#include <stdlib.h>
 
 int categoryToInt(Category a){
   switch(a) {
@@ -9,6 +9,7 @@ int categoryToInt(Category a){
     case GENERAL_KNOWLEDGE: return 3;
   }
 }
+
 Category intToCategory(int a){
   switch(a) {
     case 0: return SCIENCES;
@@ -18,5 +19,6 @@ Category intToCategory(int a){
   }
 }
 
-User* getUser( char* login){
-	}
+User* getUser(char* login){
+  return NULL;	
+}
