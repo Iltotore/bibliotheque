@@ -43,4 +43,9 @@ typedef enum {
 	NO_FIELD
 } Field;
 
+int categoryToInt(Category a);
+Category intToCategory(int a);
+
+User* getUser( char* login);
+
 #endif
