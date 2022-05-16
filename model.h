@@ -43,9 +43,16 @@ typedef enum {
 	NO_FIELD
 } Field;
 
+typedef struct {
+	Book* books;
+	User *users;
+	int numBooks;
+	int numUsers;
+} Library;
+
 int categoryToInt(Category a);
 Category intToCategory(int a);
 
-User* getUser( char* login);
+User* getUser(Library lib, char* login);
 
 #endif
