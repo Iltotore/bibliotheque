@@ -10,7 +10,7 @@ void saveBook(Book a,FILE* text){
   fprintf(text,"%s,%s,%d,%d,%s",a.title, a.author, a.id, a.category, username); 
  }
  
- Book loadBook(FILE* text){
+ Book loadBook(Library lib,FILE* text){
    Book book;
    int categoryId;
    char* username;
@@ -19,7 +19,7 @@ void saveBook(Book a,FILE* text){
    fscanf(text,"%s,%s,%d,%d,%s",book.title,book.author,&book.id,&categoryId,username);
    
    book.category=intToCategory(categoryId);
-   book.borrower=getUser(username);
+   book.borrower=getUser(lib,username);
    
    return book;
  }

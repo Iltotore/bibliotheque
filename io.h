@@ -7,6 +7,6 @@
 void saveBook(Book a,FILE* text);
 
 //Load a book from the given file.
-Book loadBook(FILE* text);
+Book loadBook(Library lib,FILE* text);
 
-#endif
+#endif 
