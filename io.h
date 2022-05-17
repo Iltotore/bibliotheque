@@ -4,9 +4,9 @@
 #define io
 
 //Save the given Book in the given file.
-void saveBook(Book a,FILE* text);
+void saveBook(Book book, FILE* file);
 
 //Load a book from the given file.
-Book loadBook(Library lib,FILE* text);
+Book loadBook(Library library, FILE* file);
 
-#endif 
+#endif

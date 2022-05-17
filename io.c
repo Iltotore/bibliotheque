@@ -4,20 +4,20 @@
 #include "io.h"
 #include "model.h"
 
-void saveBook(Book a, FILE* text){
+void saveBook(Book book, FILE* file){
   char* username;
-  if (a.borrower==NULL) username="";
-  else username=a.borrower->login;
-  fprintf(text,"%s,%s,%d,%d,%s,%ld",a.title, a.author, a.id, a.category, username, mktime(a.deliveryDate));
+  if (book.borrower==NULL) username="";
+  else username=book.borrower->login;
+  fprintf(file,"%s,%s,%d,%d,%s,%ld",book.title, book.author, book.id, book.category, username, mktime(book.deliveryDate));
  }
 
- Book loadBook(Library lib,FILE* text){
+ Book loadBook(Library lib, FILE* file){
    Book book;
    int categoryId;
    char* username;
    time_t time;
 
-   fscanf(text,"%s,%s,%d,%d,%s,%ld", book.title, book.author, &book.id, &categoryId, username, &time);
+   fscanf(file,"%s,%s,%d,%d,%s,%ld", book.title, book.author, &book.id, &categoryId, username, &time);
 
    book.category=intToCategory(categoryId);
    book.borrower=getUser(lib, username);
