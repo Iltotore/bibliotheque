@@ -34,6 +34,7 @@ char* completeWithString(char* base, int length, char* str) {
 char* focus(char* str, bool focused) {
   if(focused) {
     char* result = safeMalloc(sizeof(char)*(strlen(str)+strlen(FOCUS_STYLE)+strlen(FOCUS_RESET)+1));
+    strcpy(result, "");
     strcat(result, FOCUS_STYLE);
     strcat(result, str);
     strcat(result, FOCUS_RESET);
