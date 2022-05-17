@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <time.h>
 #ifndef model
 #define model
 
@@ -31,6 +32,7 @@ typedef struct {
 	int id;
 	Category category;
 	User* borrower;
+	struct tm* deliveryDate;
 } Book;
 
 //Represent each field of a Book.
@@ -40,6 +42,7 @@ typedef enum {
 	ID,
 	CATEGORY,
 	BORROWER,
+	DELIVERY_DATE,
 	NO_FIELD
 } Field;
 
