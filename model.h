@@ -53,9 +53,6 @@ typedef struct {
 	int numUsers;
 } Library;
 
-int categoryToInt(Category a);
-Category intToCategory(int a);
-
 User* getUser(Library lib, char* login);
 
 #endif
