@@ -12,9 +12,9 @@
 char* categoryToString(Category category) {
   switch (category) {
     case SCIENCES: return "Sciences";
-    case LITERATURE: return "Litérature";
+    case LITERATURE: return "Literature";
     case FICTION: return "Fiction";
-    case GENERAL_KNOWLEDGE: return "Culture Générale";
+    case GENERAL_KNOWLEDGE: return "Culture Generale";
   }
 }
 
@@ -61,8 +61,8 @@ void showBooks(Book books[], int length, Field focused) {
     focus(completeWithString("Titre", max[0], " "), focused == TITLE),
     focus(completeWithString("Auteur", max[1], " "), focused == AUTHOR),
     focus(completeWithString("ID", max[2], " "), focused == ID),
-    focus(completeWithString("Catégorie", max[3], " "), focused == CATEGORY),
-    focus(completeWithString("Emprunté par", max[4], " "), focused == BORROWER),
+    focus(completeWithString("Categorie", max[3], " "), focused == CATEGORY),
+    focus(completeWithString("Emprunte par", max[4], " "), focused == BORROWER),
     focus(completeWithString("Date de remise", max[5], " "), focused == DELIVERY_DATE)
   );
 
