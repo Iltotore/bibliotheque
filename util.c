@@ -20,3 +20,10 @@ int lengthOfInt(int n) {
   }
   return i;
 }
+
+void clear(FILE* stream){
+  int nh;
+  do{
+    nh=fgetc(stream);
+  }while(nh != EOF && nh != '\n');
+}
