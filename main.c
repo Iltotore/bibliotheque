@@ -17,6 +17,9 @@ int main() {
 
   Library library = loadLibrary(userFile, bookFile);
 
+  fclose(bookFile);
+  fclose(userFile);
+
   showBooks(library.books, library.bookCount, NO_FIELD);
 
   return 0;
