@@ -22,5 +22,18 @@ int main() {
 
   showBooks(library.books, library.bookCount, NO_FIELD);
 
+  bookFile = fopen("./books.csv", "r");
+  userFile = fopen("./users.csv", "r");
+
+  if(bookFile == NULL || userFile == NULL) {
+    printf("Impossible d'accéder aux fichiers de sauvegarde.\n");
+    return -1;
+  }
+
+  saveLibrary(library, userFile, bookFile);
+
+  fclose(bookFile);
+  fclose(userFile);
+
   return 0;
 }
