@@ -51,7 +51,7 @@ void saveLibrary(Library library, FILE* userFile, FILE* bookFile) {
   for(int i = 0; i < library.userCount; i++) saveUser(library.users[i], userFile);
 
   fprintf(bookFile, "%d\n", library.bookCount);
-  for(int i = 0; i < library.bookCount; i++) saveUser(library.users[i], bookFile);
+  for(int i = 0; i < library.bookCount; i++) saveBook(library.books[i], bookFile);
 }
 
 Library loadLibrary(FILE* userFile, FILE* bookFile) {
