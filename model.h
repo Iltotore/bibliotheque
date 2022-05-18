@@ -49,8 +49,8 @@ typedef enum {
 typedef struct {
 	Book* books;
 	User* users;
-	int numBooks;
-	int numUsers;
+	int bookCount;
+	int userCount;
 } Library;
 
 User* getUser(Library lib, char* login);

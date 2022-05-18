@@ -4,30 +4,45 @@
 #include "model.h"
 #include "gui.h"
 #include "util.h"
+#include "io.h"
 
 int main() {
 
-
-
   srand(time(NULL));
 
-  Book dummy;
-  dummy.title = "The Scala Cookbook";
-  dummy.author = "Alvin Alexander";
-  dummy.id = 0;
-  dummy.category = SCIENCES;
-  dummy.borrower = NULL;
+  FILE* bookFile = fopen("./books.csv", "r");
+  FILE* userFile = fopen("./users.csv", "r");
 
-  time_t current = time(NULL);
-  dummy.deliveryDate = localtime(&current);
+  //TODO Load Library
 
-  Book books[5];
-  for(int i = 0; i < 5; i++) {
-    books[i] = dummy;
-    books[i].id = rand();
+  if(bookFile == NULL || userFile == NULL) {
+    printf("Impossible d'accéder aux fichiers de sauvegarde.\n");
+    return -1;
   }
 
-  showBooks(books, 5, NO_FIELD);
+  Library library;
+
+  int bookCount, userCount;
+
+  fscanf(userFile, "%d\n", &userCount);
+  printf("Chargement des utilisateurs (%d)...\n", userCount);
+
+  library.userCount = userCount;
+  library.users = safeMalloc(sizeof(User)*userCount);
+  for(int i = 0; i < userCount; i++) library.users[i] = loadUser(userFile);
+
+  fclose(userFile);
+
+  fscanf(bookFile, "%d\n", &bookCount);
+  printf("Chargement des livres (%d)...\n", bookCount);
+
+  library.bookCount = bookCount;
+  library.books = safeMalloc(sizeof(Book)*bookCount);
+  for(int i = 0; i < bookCount; i++) library.books[i] = loadBook(library, bookFile);
+
+  fclose(bookFile);
+
+  showBooks(library.books, bookCount, NO_FIELD);
 
   return 0;
 }
