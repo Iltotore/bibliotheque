@@ -41,7 +41,8 @@ Book loadBook(Library lib, FILE* file){
 
   book.category = (Category) categoryId;
   book.borrower=getUser(lib, username);
-  book.deliveryDate=localtime(&time);
+  book.deliveryDate=safeMalloc(sizeof(struct tm));
+  *book.deliveryDate=*localtime(&time);
 
   return book;
 }
@@ -71,7 +72,9 @@ Library loadLibrary(FILE* userFile, FILE* bookFile) {
 
   library.bookCount = bookCount;
   library.books = safeMalloc(sizeof(Book)*bookCount);
-  for(int i = 0; i < bookCount; i++) library.books[i] = loadBook(library, bookFile);
+  for(int i = 0; i < bookCount; i++) {
+    library.books[i] = loadBook(library, bookFile);
+  }
 
   return library;
 }
