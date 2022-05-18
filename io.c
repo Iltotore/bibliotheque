@@ -45,3 +45,33 @@ User loadUser(FILE* file) {
 
   return user;
 }
+
+void saveLibrary(Library library, FILE* userFile, FILE* bookFile) {
+  fprintf(userFile, "%d\n", library.userCount);
+  for(int i = 0; i < library.userCount; i++) saveUser(library.users[i], userFile);
+
+  fprintf(bookFile, "%d\n", library.bookCount);
+  for(int i = 0; i < library.bookCount; i++) saveUser(library.users[i], bookFile);
+}
+
+Library loadLibrary(FILE* userFile, FILE* bookFile) {
+  Library library;
+
+  int bookCount, userCount;
+
+  fscanf(userFile, "%d\n", &userCount);
+  printf("Chargement des utilisateurs (%d)...\n", userCount);
+
+  library.userCount = userCount;
+  library.users = safeMalloc(sizeof(User)*userCount);
+  for(int i = 0; i < userCount; i++) library.users[i] = loadUser(userFile);
+
+  fscanf(bookFile, "%d\n", &bookCount);
+  printf("Chargement des livres (%d)...\n", bookCount);
+
+  library.bookCount = bookCount;
+  library.books = safeMalloc(sizeof(Book)*bookCount);
+  for(int i = 0; i < bookCount; i++) library.books[i] = loadBook(library, bookFile);
+
+  return library;
+}
