@@ -22,6 +22,7 @@ int main() {
   fclose(userFile);
   User* user;
   int i=0;
+  //Authentification
   do{
     if(i==3){
       printf("Le nombre maximal d'essais a été atteint.\n");
@@ -39,7 +40,20 @@ int main() {
     if (user == NULL) printf("Vos identifiants sont incorrects, veuillez réessayer.\n");
     i++;
   }while( user == NULL);
-  showBooks(library.books, library.bookCount, NO_FIELD);
+  char* choices[2]={"Les livres de la bibliothèque","Quitter"};
+  int action;
+  do{
+    action =askInt("Sélectionnez une action", choices, 2);
+    switch (action) {
+      case 0:
+       showBooks(library.books, library.bookCount, NO_FIELD);
+       break;
+      case 1:
+       break;
+    }
+  }while(action != 1);
+  printf("Au revoir et à bientôt ! Parce que lire c'est grandir !\n");
+
 
   bookFile = fopen("./books.csv", "r");
   userFile = fopen("./users.csv", "r");
