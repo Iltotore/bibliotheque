@@ -21,7 +21,12 @@ int main() {
   fclose(bookFile);
   fclose(userFile);
   User* user;
-  do{ 
+  int i=0;
+  do{
+    if(i==3){
+      printf("Le nombre maximal d'essais a été atteint.\n");
+      return 0;
+    }
     char* login = safeMalloc(sizeof(char)*100);
     char* password =safeMalloc(sizeof(char)*100);
     printf("Rentrez votre nom d'utilisateur : \n");
@@ -31,6 +36,8 @@ int main() {
     scanf("%100s",password);
     clear(stdin);
     user = authenticateUser(library,login,password);
+    if (user == NULL) printf("Vos identifiants sont incorrects, veuillez réessayer.\n");
+    i++;
   }while( user == NULL);
   showBooks(library.books, library.bookCount, NO_FIELD);
 
