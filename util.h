@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #ifndef util
 #define util
 
@@ -10,4 +11,10 @@ void* safeMalloc(size_t size);
 int lengthOfInt(int n);
 
 void clear(FILE* stream);
+
+//Renvoie true si la chaine de caractère `str` contient la chaine `part`
+bool strContains(char* str, char* part);
+
+//Renvoie true si la chaine de caractère `str` contient au moins un élément de la chaine `chars`
+bool strContainsAtLeast(char* str, char* chars);
 #endif
