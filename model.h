@@ -55,5 +55,6 @@ typedef struct {
 
 User* getUser(Library lib, char* login);
 User* authenticateUser(Library library, char* login, char* password);
+User* registerUser(Library* library, char* login, char* password);
 
 #endif
