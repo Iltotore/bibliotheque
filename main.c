@@ -8,7 +8,7 @@
 
 #define UPPERS "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define LOWERS "abcdefghijklmnopqrstuvwxyz"
-#define DIGITS "0123456789"
+#define DIGITS "123456789"
 
 User* loginMenu(Library library) {
   int i=0;
@@ -121,23 +121,25 @@ int main() {
       break;
   }
 
-  char* choices[2]={"Les livres de la bibliothèque","Quitter"};
+  char* choices[3]={"Les livres de la bibliothèque","Promouvoir un administrateur.","Quitter"};
   int action;
   do{
-    action = askInt("Sélectionnez une action", choices, 2);
+    action = askInt("Sélectionnez une action", choices, 3);
     switch (action) {
       case 0:
-        showBooks(library.books, library.bookCount, NO_FIELD);
-        break;
+       showBooks(library.books, library.bookCount, NO_FIELD);
+       break;
       case 1:
-        break;
+       break;
+      case 3:
+       break;
     }
   }while(action != 1);
   printf("Au revoir et à bientôt ! Parce que lire c'est grandir !\n");
 
 
-  bookFile = fopen("./books.csv", "w");
-  userFile = fopen("./users.csv", "w");
+  bookFile = fopen("./books.csv", "r");
+  userFile = fopen("./users.csv", "r");
 
   if(bookFile == NULL || userFile == NULL) {
     printf("Impossible d'accéder aux fichiers de sauvegarde.\n");
