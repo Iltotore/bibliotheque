@@ -1,3 +1,4 @@
+
 #include <stdbool.h>
 #include <time.h>
 #ifndef model
@@ -6,7 +7,8 @@
 //The possible roles of a user.
 typedef enum {
 	STUDENT,
-	TEACHER
+	TEACHER,
+	ADMINISTRATOR,
 } Role;
 
 //A registered user with its login, password, role and whether they are blacklisted.
