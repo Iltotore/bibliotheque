@@ -8,7 +8,7 @@
 
 #define UPPERS "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define LOWERS "abcdefghijklmnopqrstuvwxyz"
-#define DIGITS "123456789"
+#define DIGITS "0123456789"
 
 User* loginMenu(Library library) {
   int i=0;
