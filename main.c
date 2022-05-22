@@ -127,17 +127,17 @@ int main() {
     action = askInt("Sélectionnez une action", choices, 2);
     switch (action) {
       case 0:
-       showBooks(library.books, library.bookCount, NO_FIELD);
-       break;
+        showBooks(library.books, library.bookCount, NO_FIELD);
+        break;
       case 1:
-       break;
+        break;
     }
   }while(action != 1);
   printf("Au revoir et à bientôt ! Parce que lire c'est grandir !\n");
 
 
-  bookFile = fopen("./books.csv", "r");
-  userFile = fopen("./users.csv", "r");
+  bookFile = fopen("./books.csv", "w");
+  userFile = fopen("./users.csv", "w");
 
   if(bookFile == NULL || userFile == NULL) {
     printf("Impossible d'accéder aux fichiers de sauvegarde.\n");

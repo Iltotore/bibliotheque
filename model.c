@@ -21,8 +21,9 @@ User* authenticateUser(Library library, char* login, char* password) {
 }
 
 User* registerUser(Library* library, char* login, char* password) {
-  User* users = safeMalloc(sizeof(User)*(library->userCount+1));
-  for(int i = 0; i < library->userCount; i++) users[i] = library->users[i];
+  int newCount = library->userCount+1;
+  User* users = safeMalloc(sizeof(User)*newCount);
+  for(int i = 0; i < newCount; i++) users[i] = library->users[i];
 
   User registered;
   registered.login = login;
@@ -30,8 +31,10 @@ User* registerUser(Library* library, char* login, char* password) {
   registered.role = STUDENT;
   registered.blacklisted = false;
 
-  users[library->userCount+1] = registered;
+  users[newCount-1] = registered;
 
-  (*library).users = users;
-  (*library).userCount++;
+  library->users = users;
+  library->userCount = newCount;
+
+  return library->users+newCount-1;
 }
