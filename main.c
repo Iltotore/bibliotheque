@@ -121,15 +121,17 @@ int main() {
       break;
   }
 
-  char* choices[2]={"Les livres de la bibliothèque","Quitter"};
+  char* choices[3]={"Les livres de la bibliothèque","Promouvoir un administrateur.","Quitter"};
   int action;
   do{
-    action = askInt("Sélectionnez une action", choices, 2);
+    action = askInt("Sélectionnez une action", choices, 3);
     switch (action) {
       case 0:
        showBooks(library.books, library.bookCount, NO_FIELD);
        break;
       case 1:
+       break;
+      case 3:
        break;
     }
   }while(action != 1);
