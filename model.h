@@ -47,6 +47,7 @@ typedef enum {
 	NO_FIELD
 } Field;
 
+//Represent a Library. A Library contains an array of Users and an array of Book;
 typedef struct {
 	Book* books;
 	User* users;
@@ -54,8 +55,13 @@ typedef struct {
 	int userCount;
 } Library;
 
+//Get the User with the given name from the given Library.
 User* getUser(Library lib, char* login);
+
+//Return the User corresponding to the given credentials. Return NULL if credentials don't match.
 User* authenticateUser(Library library, char* login, char* password);
+
+//Register and return a new User into the passed Library using the given credentials.
 User* registerUser(Library* library, char* login, char* password);
 
 #endif

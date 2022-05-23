@@ -4,6 +4,7 @@
 #include "model.h"
 #include "util.h"
 
+//Get the User with the given name from the given Library.
 User* getUser(Library lib,char* login){
   for(int i=0;i<lib.userCount ;i++){
     if (strcmp(login, lib.users[i].login) == 0) {
@@ -13,6 +14,7 @@ User* getUser(Library lib,char* login){
   return NULL;
 }
 
+//Return the User corresponding to the given credentials. Return NULL if credentials don't match.
 User* authenticateUser(Library library, char* login, char* password) {
   User* user = getUser(library, login);
   if(user == NULL) return NULL;
@@ -20,6 +22,7 @@ User* authenticateUser(Library library, char* login, char* password) {
   else return NULL;
 }
 
+//Register and return a new User into the passed Library using the given credentials.
 User* registerUser(Library* library, char* login, char* password) {
   int newCount = library->userCount+1;
   User* users = safeMalloc(sizeof(User)*newCount);

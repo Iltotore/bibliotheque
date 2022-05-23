@@ -6,10 +6,12 @@
 #include "model.h"
 #include "util.h"
 
+//Save the given user in the given file.
 void saveUser(User user, FILE* file) {
   fprintf(file, "%s,%s,%d,%d\n", user.login, user.password, user.role, user.blacklisted);
 }
 
+//Load a user from the given file.
 User loadUser(FILE* file) {
   User user;
   int roleId;
@@ -25,10 +27,12 @@ User loadUser(FILE* file) {
   return user;
 }
 
+//Save the given Book in the given file.
 void saveBook(Book book, FILE* file){
   fprintf(file,"%s,%s,%d,%d,%s,%ld\n",book.title, book.author, book.id, book.category, book.borrower==NULL ? " " : book.borrower->login, mktime(book.deliveryDate));
  }
 
+///Load a book from the given file using the passed library.
 Book loadBook(Library lib, FILE* file){
   Book book;
   book.title = safeMalloc(sizeof(char)*101);
@@ -47,6 +51,7 @@ Book loadBook(Library lib, FILE* file){
   return book;
 }
 
+//Save the given library.
 void saveLibrary(Library library, FILE* userFile, FILE* bookFile) {
   fprintf(userFile, "%d\n", library.userCount);
   for(int i = 0; i < library.userCount; i++) saveUser(library.users[i], userFile);
@@ -55,6 +60,7 @@ void saveLibrary(Library library, FILE* userFile, FILE* bookFile) {
   for(int i = 0; i < library.bookCount; i++) saveBook(library.books[i], bookFile);
 }
 
+//Load a new library from the given user file and book file.
 Library loadLibrary(FILE* userFile, FILE* bookFile) {
   Library library;
 

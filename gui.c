@@ -9,6 +9,7 @@
 #define FOCUS_STYLE "\x1b[1m"
 #define FOCUS_RESET "\x1b[0m"
 
+//Return a string representation of the given Category.
 char* categoryToString(Category category) {
   switch (category) {
     case SCIENCES: return "Sciences";
@@ -18,6 +19,7 @@ char* categoryToString(Category category) {
   }
 }
 
+//Extend a string using the given char sequence `str`.
 char* completeWithString(char* base, int length, char* str) {
   int currentLength = strlen(base);
   if(currentLength > length) return base;
@@ -31,6 +33,7 @@ char* completeWithString(char* base, int length, char* str) {
   return result;
 }
 
+//Highlight the given `str` if `focused` is true.
 char* focus(char* str, bool focused) {
   if(focused) {
     char* result = safeMalloc(sizeof(char)*(strlen(str)+strlen(FOCUS_STYLE)+strlen(FOCUS_RESET)+1));
@@ -42,6 +45,7 @@ char* focus(char* str, bool focused) {
   } else return str;
 }
 
+//Display the given book array with the given length. A specific field can be highlighted.
 void showBooks(Book books[], int length, Field focused) {
   int max[6] = {5, 6, 2, 9, 12, 14};
   for(int i = 0; i < length; i++) {
@@ -90,6 +94,7 @@ void showBooks(Book books[], int length, Field focused) {
   printf("%s\n", completeWithString("", totalLength+1, "-"));
 }
 
+//Ask the user to select one of the given choices (represented by an int).
 int askInt(char* message, char* choices[], int length) {
   printf("%s\n", message);
   for(int i = 0; i < length; i++) printf("[%d]: %s\n", i+1, choices[i]);

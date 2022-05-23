@@ -3,6 +3,7 @@
 #include "util.h"
 #include "string.h"
 
+//Safely allocate the given size. The program exits on failure.
 void* safeMalloc(size_t size) {
   void* pointer = malloc(size);
   if(pointer == NULL) {
@@ -12,6 +13,7 @@ void* safeMalloc(size_t size) {
   return pointer;
 }
 
+//Return the textual length of the given integer.
 int lengthOfInt(int n) {
   int i = 0;
   if(n < 0) i++;
@@ -22,6 +24,7 @@ int lengthOfInt(int n) {
   return i;
 }
 
+//Clear/Flush the given stream.
 void clear(FILE* stream){
   int nh;
   do{
@@ -29,6 +32,7 @@ void clear(FILE* stream){
   }while(nh != EOF && nh != '\n');
 }
 
+//Renvoie true si la chaine de caractère `str` contient la chaine `part`
 bool strcontains(char* str, char* part) {
   int strLength = strlen(str);
   int partLength = strlen(part);
@@ -42,6 +46,7 @@ bool strcontains(char* str, char* part) {
   return matching == partLength;
 }
 
+//Renvoie true si la chaine de caractère `str` contient au moins un élément de la chaine `chars`
 bool strContainsAtLeast(char* str, char* chars) {
   int strLength = strlen(str);
   int charCount = strlen(chars);

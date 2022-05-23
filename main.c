@@ -10,6 +10,7 @@
 #define LOWERS "abcdefghijklmnopqrstuvwxyz"
 #define DIGITS "123456789"
 
+//Login sub menu
 User* loginMenu(Library library) {
   int i=0;
   User* user;
@@ -34,6 +35,7 @@ User* loginMenu(Library library) {
   return user;
 }
 
+//Register sub menu
 User* registerMenu(Library* library) {
   User* existing = NULL;
   char* login = safeMalloc(sizeof(char)*101);
