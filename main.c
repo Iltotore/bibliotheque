@@ -131,15 +131,15 @@ int main() {
        break;
       case 1:
        break;
-      case 3:
+      case 2:
        break;
     }
-  }while(action != 1);
+  }while(action != 2);
   printf("Au revoir et à bientôt ! Parce que lire c'est grandir !\n");
 
 
-  bookFile = fopen("./books.csv", "r");
-  userFile = fopen("./users.csv", "r");
+  bookFile = fopen("./books.csv", "w");
+  userFile = fopen("./users.csv", "w");
 
   if(bookFile == NULL || userFile == NULL) {
     printf("Impossible d'accéder aux fichiers de sauvegarde.\n");
