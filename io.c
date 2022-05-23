@@ -30,7 +30,7 @@ User loadUser(FILE* file) {
 //Save the given Book in the given file.
 void saveBook(Book book, FILE* file){
   fprintf(file,"%s,%s,%d,%d,%s,%ld\n",book.title, book.author, book.id, book.category, book.borrower==NULL ? " " : book.borrower->login, mktime(book.deliveryDate));
- }
+}
 
 ///Load a book from the given file using the passed library.
 Book loadBook(Library lib, FILE* file){
@@ -78,9 +78,7 @@ Library loadLibrary(FILE* userFile, FILE* bookFile) {
 
   library.bookCount = bookCount;
   library.books = safeMalloc(sizeof(Book)*bookCount);
-  for(int i = 0; i < bookCount; i++) {
-    library.books[i] = loadBook(library, bookFile);
-  }
+  for(int i = 0; i < bookCount; i++) library.books[i] = loadBook(library, bookFile);
 
   return library;
 }

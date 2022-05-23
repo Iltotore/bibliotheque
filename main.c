@@ -110,8 +110,8 @@ int main() {
 
   fclose(bookFile);
   fclose(userFile);
+  
   User* user;
-
   char* logChoices[2] = {"Se connecter", "S'inscrire"};
 
   switch(askInt("Bonjour !", logChoices, 2)) {
