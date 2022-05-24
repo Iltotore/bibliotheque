@@ -96,6 +96,23 @@ User* registerMenu(Library* library) {
   return user;
 }
 
+void banMenu(Library library,char* current){
+  User* target;
+  char* name=safeMalloc(sizeof(char)*101);
+  do{
+    printf("Quel utilisateur souhaitez vous bannir ?\n");
+    scanf("%100s",name);
+    clear(stdin);
+    target= getUser(library,name);
+    if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
+    if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous bannir vous-même !\n");
+  }while(target==NULL || strcmp(name, current) == 0);
+
+  target->blacklisted = true;
+
+  printf("L'utilisateur a bien été banni.\n");
+}
+
 void promoteMenu(Library library, char* current) {
  User* target;
  char* name=safeMalloc(sizeof(char)*101);
@@ -113,6 +130,42 @@ void promoteMenu(Library library, char* current) {
    promoteUser(target);
    printf("L'utilisateur a bien été promu\n");
  }
+}
+
+void mainMenu(Library* library, User* user) {
+  char* choices[2]={"Les livres de la bibliothèque","Quitter"};
+  int action;
+  do{
+    action = askInt("Sélectionnez une action", choices, 2);
+    switch (action) {
+      case 0:
+       showBooks(library->books, library->bookCount, NO_FIELD);
+       break;
+      case 1:
+       break;
+    }
+  }while(action != 1);
+}
+
+void adminMainMenu(Library* library, User* user) {
+  char* choices[4]={"Les livres de la bibliothèque","Bannir un utilisateur","Promouvoir un utilisateur","Quitter"};
+  int action;
+  do{
+    action = askInt("Sélectionnez une action", choices, 4);
+    switch (action) {
+      case 0:
+       showBooks(library->books, library->bookCount, NO_FIELD);
+       break;
+      case 1:
+       banMenu(*library,user->login);
+       break;
+      case 2:
+       promoteMenu(*library, user->login);
+       break;
+      case 3:
+       break;
+    }
+  }while(action != 3);
 }
 
 int main() {
@@ -143,22 +196,9 @@ int main() {
       break;
   }
 
-  char* choices[3]={"Les livres de la bibliothèque","Promouvoir un utilisateur","Quitter"};
-  int action;
-  do{
-    action = askInt("Sélectionnez une action", choices, 3);
-    switch (action) {
-      case 0:
-       showBooks(library.books, library.bookCount, NO_FIELD);
-       break;
-      case 1:
-       if(user->role == ADMINISTRATOR) promoteMenu(library, user->login);
-       else printf("Vous n'êtes pas administrateur !\n");
-       break;
-      case 2:
-       break;
-    }
-  }while(action != 2);
+  if(user->role == ADMINISTRATOR) adminMainMenu(&library, user);
+  else mainMenu(&library, user);
+
   printf("Au revoir et à bientôt ! Parce que lire c'est grandir !\n");
 
 
