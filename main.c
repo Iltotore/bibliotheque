@@ -113,6 +113,22 @@ void banMenu(Library library,char* current){
   printf("L'utilisateur a bien été banni.\n");
 }
 
+void mercyMenu(Library library){
+  User* target;
+  char* name=safeMalloc(sizeof(char)*101);
+  do{
+    printf("Quel utilisateur souhaitez vous réabiliter ?\n");
+    scanf("%100s",name);
+    clear(stdin);
+    target= getUser(library,name);
+    if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
+  }while(target==NULL);
+
+  target->blacklisted = false;
+
+  printf("L'utilisateur a bien été réabilité.\n");
+}
+
 void promoteMenu(Library library, char* current) {
  User* target;
  char* name=safeMalloc(sizeof(char)*101);
@@ -148,10 +164,10 @@ void mainMenu(Library* library, User* user) {
 }
 
 void adminMainMenu(Library* library, User* user) {
-  char* choices[4]={"Les livres de la bibliothèque","Bannir un utilisateur","Promouvoir un utilisateur","Quitter"};
+  char* choices[5]={"Les livres de la bibliothèque","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
   int action;
   do{
-    action = askInt("Sélectionnez une action", choices, 4);
+    action = askInt("Sélectionnez une action", choices, 5);
     switch (action) {
       case 0:
        showBooks(library->books, library->bookCount, NO_FIELD);
@@ -160,12 +176,15 @@ void adminMainMenu(Library* library, User* user) {
        banMenu(*library,user->login);
        break;
       case 2:
-       promoteMenu(*library, user->login);
+       mercyMenu(*library);
        break;
       case 3:
+       promoteMenu(*library, user->login);
+       break;
+      case 4:
        break;
     }
-  }while(action != 3);
+  }while(action != 4);
 }
 
 int main() {
