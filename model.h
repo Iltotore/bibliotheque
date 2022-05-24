@@ -64,4 +64,6 @@ User* authenticateUser(Library library, char* login, char* password);
 //Register and return a new User into the passed Library using the given credentials.
 User* registerUser(Library* library, char* login, char* password);
 
+void promoteUser(User* user);
+
 #endif

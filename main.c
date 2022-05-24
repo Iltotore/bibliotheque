@@ -10,6 +10,7 @@
 #define LOWERS "abcdefghijklmnopqrstuvwxyz"
 #define DIGITS "123456789"
 
+
 //Login sub menu
 User* loginMenu(Library library) {
   int i=0;
@@ -95,6 +96,25 @@ User* registerMenu(Library* library) {
   return user;
 }
 
+void promoteMenu(Library library, char* current) {
+ User* target;
+ char* name=safeMalloc(sizeof(char)*101);
+ do{
+   printf("Quel utilisateur souhaitez vous promouvoir ?\n");
+   scanf("%100s",name);
+   clear(stdin);
+   target= getUser(library,name);
+   if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
+   if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous promouvoir vous-même.\n");
+ }while(target==NULL || strcmp(name, current) == 0);
+
+ if(target->role == ADMINISTRATOR) printf("L'utilisateur est déjà un administrateur\n");
+ else {
+   promoteUser(target);
+   printf("L'utilisateur a bien été promu\n");
+ }
+}
+
 int main() {
   srand(time(NULL));
 
@@ -110,7 +130,7 @@ int main() {
 
   fclose(bookFile);
   fclose(userFile);
-  
+
   User* user;
   char* logChoices[2] = {"Se connecter", "S'inscrire"};
 
@@ -123,7 +143,7 @@ int main() {
       break;
   }
 
-  char* choices[3]={"Les livres de la bibliothèque","Promouvoir un administrateur.","Quitter"};
+  char* choices[3]={"Les livres de la bibliothèque","Promouvoir un utilisateur","Quitter"};
   int action;
   do{
     action = askInt("Sélectionnez une action", choices, 3);
@@ -132,6 +152,8 @@ int main() {
        showBooks(library.books, library.bookCount, NO_FIELD);
        break;
       case 1:
+       if(user->role == ADMINISTRATOR) promoteMenu(library, user->login);
+       else printf("Vous n'êtes pas administrateur !\n");
        break;
       case 2:
        break;

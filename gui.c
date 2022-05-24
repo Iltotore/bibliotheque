@@ -100,9 +100,11 @@ int askInt(char* message, char* choices[], int length) {
   for(int i = 0; i < length; i++) printf("[%d]: %s\n", i+1, choices[i]);
   int answer;
   scanf("%d", &answer);
+  clear(stdin);
   while (answer < 1 || answer > length) {
     printf("Veuillez saisir un nombre entre 1 et %d\n", length);
     scanf("%d", &answer);
+    clear(stdin);
   }
   return answer-1;
 }

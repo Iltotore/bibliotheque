@@ -41,3 +41,9 @@ User* registerUser(Library* library, char* login, char* password) {
 
   return library->users+newCount-1;
 }
+
+//Promote an user to the upper role
+void promoteUser(User* user){
+  if(user->role == STUDENT) user->role = TEACHER ;
+  else if(user->role == TEACHER) user->role = ADMINISTRATOR;
+}
