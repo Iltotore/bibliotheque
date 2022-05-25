@@ -66,4 +66,13 @@ User* registerUser(Library* library, char* login, char* password);
 
 void promoteUser(User* user);
 
+//Get the book with the given id from the given Library.
+Book* getBook(Library library, int id);
+
+//Return the count of remaining borrowing.
+int remaining(Library library, User* user);
+
+//Borrow a book with the given user as borrower.
+void borrowBook(User* user, Book* book);
+
 #endif

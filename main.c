@@ -148,43 +148,75 @@ void promoteMenu(Library library, char* current) {
  }
 }
 
+void borrowMenu(Library library, User* user) {
+  if(remaining(library, user) == 0) {
+    printf("Vous ne pouvez pas emprunter plus de livre !\n");
+    return;
+  }
+
+  if(user->blacklisted) {
+    printf("Vous n'avez pas le droit d'emprunter de livre. Si il s'agit d'une erreur, contactez votre administrateur\n");
+    return;
+  }
+
+  Book* target;
+  do {
+    int id;
+    printf("Entrez l'ID du livre à emprunter.\n");
+    scanf("%d", &id);
+    clear(stdin);
+    target = getBook(library, id);
+
+    if(target == NULL) printf("Aucun livre ne correspond à cet identifiant.\n");
+  } while(target == NULL);
+
+  borrowBook(user, target);
+
+  printf("Livre emprunté.\n");
+}
+
 void mainMenu(Library* library, User* user) {
-  char* choices[2]={"Les livres de la bibliothèque","Quitter"};
+  char* choices[3]={"Les livres de la bibliothèque","Emprunter un livre", "Quitter"};
   int action;
   do{
-    action = askInt("Sélectionnez une action", choices, 2);
+    action = askInt("Sélectionnez une action", choices, 3);
     switch (action) {
       case 0:
        showBooks(library->books, library->bookCount, NO_FIELD);
        break;
       case 1:
+       borrowMenu(*library, user);
+      case 2:
        break;
     }
-  }while(action != 1);
+  }while(action != 2);
 }
 
 void adminMainMenu(Library* library, User* user) {
-  char* choices[5]={"Les livres de la bibliothèque","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
+  char* choices[6]={"Les livres de la bibliothèque","Emprunter un livre","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
   int action;
   do{
-    action = askInt("Sélectionnez une action", choices, 5);
+    action = askInt("Sélectionnez une action", choices, 6);
     switch (action) {
       case 0:
        showBooks(library->books, library->bookCount, NO_FIELD);
        break;
       case 1:
-       banMenu(*library,user->login);
+       borrowMenu(*library, user);
        break;
       case 2:
-       mercyMenu(*library);
+       banMenu(*library,user->login);
        break;
       case 3:
-       promoteMenu(*library, user->login);
+       mercyMenu(*library);
        break;
       case 4:
+       promoteMenu(*library, user->login);
+       break;
+      case 5:
        break;
     }
-  }while(action != 4);
+  }while(action != 5);
 }
 
 int main() {

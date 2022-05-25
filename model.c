@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 #include "model.h"
 #include "util.h"
 
@@ -46,4 +47,34 @@ User* registerUser(Library* library, char* login, char* password) {
 void promoteUser(User* user){
   if(user->role == STUDENT) user->role = TEACHER ;
   else if(user->role == TEACHER) user->role = ADMINISTRATOR;
+}
+
+//Get the book with the given id from the given Library.
+Book* getBook(Library library, int id) {
+  for(int i=0;i<library.bookCount ;i++){
+    if (id == library.books[i].id) {
+      return library.books+i;
+    }
+  }
+  return NULL;
+}
+
+//Return the count of remaining borrowing.
+int remaining(Library library, User* user) {
+  int result = user->role == STUDENT ? 3 : 5;
+  for(int i = 0; i < library.bookCount; i++) {
+    if(library.books[i].borrower == user) result--;
+  }
+  return result;
+}
+
+//Borrow a book with the given user as borrower
+void borrowBook(User* user, Book* book) {
+  int duration = user->role == STUDENT ? 2*60 : 3*60;
+
+  book->borrower = user;
+
+  time_t endTime = time(NULL)+duration;
+  struct tm* endDate = localtime(&endTime);
+  *(book->deliveryDate) = *endDate;
 }
