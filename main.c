@@ -208,6 +208,7 @@ void mainMenu(Library* library, User* user) {
   char* choices[3]={"Emprunter un livre", "Rendre un livre", "Quitter"};
   int action;
   do{
+    system("clear");
     showBooks(library->books, library->bookCount, NO_FIELD);
     action = askInt("Sélectionnez une action", choices, 3);
     switch (action) {
@@ -227,6 +228,7 @@ void adminMainMenu(Library* library, User* user) {
   char* choices[6]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
   int action;
   do{
+    system("clear");
     showBooks(library->books, library->bookCount, NO_FIELD);
     action = askInt("Sélectionnez une action", choices, 7);
     switch (action) {
