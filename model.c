@@ -68,6 +68,27 @@ int remaining(Library library, User* user) {
   return result;
 }
 
+//Return the list of books borrowed by the given user.
+Book* borrowedBooks(Library library, User* user, int* length) {
+  *length = 0;
+  for(int i = 0; i < library.bookCount; i++) {
+    if(library.books[i].borrower == user) (*length)++;
+  }
+
+  Book* borrowed = safeMalloc(sizeof(Book)*(*length));
+
+  int n = 0;
+
+  for(int i = 0; i < library.bookCount; i++) {
+    if(library.books[i].borrower == user) {
+      borrowed[n] = library.books[i];
+      n++;
+    }
+  }
+
+  return borrowed;
+}
+
 //Borrow a book with the given user as borrower
 void borrowBook(User* user, Book* book) {
   int duration = user->role == STUDENT ? 2*60 : 3*60;
@@ -77,4 +98,15 @@ void borrowBook(User* user, Book* book) {
   time_t endTime = time(NULL)+duration;
   struct tm* endDate = localtime(&endTime);
   *(book->deliveryDate) = *endDate;
+}
+
+//Make the given user deliver a borrowed book.
+void deliverBook(Book* book) {
+	time_t deliveryTime = mktime(book->deliveryDate);
+	if(time(NULL) > deliveryTime) book->borrower->blacklisted = true;
+
+  book->borrower = NULL;
+
+  time_t t = 0;
+  *(book->deliveryDate) = *(localtime(&t));
 }

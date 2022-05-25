@@ -72,7 +72,13 @@ Book* getBook(Library library, int id);
 //Return the count of remaining borrowing.
 int remaining(Library library, User* user);
 
+//Return the list of books borrowed by the given user.
+Book* borrowedBooks(Library library, User* user, int* length);
+
 //Borrow a book with the given user as borrower.
 void borrowBook(User* user, Book* book);
+
+//Make the given user deliver a borrowed book.
+void deliverBook(Book* book);
 
 #endif
