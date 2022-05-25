@@ -79,9 +79,7 @@ User* registerMenu(Library* library) {
       char* confirm = safeMalloc(sizeof(char)*101);
       printf("Confirmez votre mot de passe:\n");
       scanf("%100s", confirm);
-      printf("Scanned\n");
       clear(stdin);
-      printf("Cleared\n");
       if(strcmp(password, confirm) != 0) {
         printf("Les deux mots de passe ne correspondent pas.\n");
         valid = false;
@@ -131,6 +129,11 @@ void deliverMenu(Library library, User* user) {
   int length;
   Book* borrowed = borrowedBooks(library, user, &length);
 
+  if(length == 0) {
+    printf("Vous n'avez emprunté aucun livre.\n");
+    return;
+  }
+
   do {
     showBooks(borrowed, length, NO_FIELD);
 
@@ -141,7 +144,7 @@ void deliverMenu(Library library, User* user) {
 
     target = getBook(library, id);
 
-    if(target->borrower != user) target = NULL;
+    if(target != NULL && target->borrower != user) target = NULL;
     if(target == NULL) printf("Aucun livre ne correspond à cet identifiant.\n");
   } while(target == NULL);
 
