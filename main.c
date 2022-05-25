@@ -107,8 +107,6 @@ void borrowMenu(Library library, User* user) {
 
   Book* target;
   do {
-    showBooks(library.books, library.bookCount, NO_FIELD);
-
     int id;
     printf("Entrez l'ID du livre à emprunter.\n");
     scanf("%d", &id);
@@ -207,54 +205,50 @@ void promoteMenu(Library library, char* current) {
 }
 
 void mainMenu(Library* library, User* user) {
-  char* choices[4]={"Les livres de la bibliothèque", "Emprunter un livre", "Rendre un livre", "Quitter"};
+  char* choices[3]={"Emprunter un livre", "Rendre un livre", "Quitter"};
   int action;
   do{
-    action = askInt("Sélectionnez une action", choices, 4);
+    showBooks(library->books, library->bookCount, NO_FIELD);
+    action = askInt("Sélectionnez une action", choices, 3);
     switch (action) {
       case 0:
-       showBooks(library->books, library->bookCount, NO_FIELD);
-       break;
-      case 1:
        borrowMenu(*library, user);
        break;
-      case 2:
+      case 1:
        deliverMenu(*library, user);
        break;
-      case 3:
+      case 2:
        break;
     }
-  }while(action != 3);
+  }while(action != 2);
 }
 
 void adminMainMenu(Library* library, User* user) {
-  char* choices[7]={"Les livres de la bibliothèque","Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
+  char* choices[6]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
   int action;
   do{
+    showBooks(library->books, library->bookCount, NO_FIELD);
     action = askInt("Sélectionnez une action", choices, 7);
     switch (action) {
       case 0:
-       showBooks(library->books, library->bookCount, NO_FIELD);
-       break;
-      case 1:
        borrowMenu(*library, user);
        break;
-      case 2:
+      case 1:
        deliverMenu(*library, user);
        break;
-      case 3:
+      case 2:
        banMenu(*library,user->login);
        break;
-      case 4:
+      case 3:
        mercyMenu(*library);
        break;
-      case 5:
+      case 4:
        promoteMenu(*library, user->login);
        break;
-      case 6:
+      case 5:
        break;
     }
-  }while(action != 6);
+  }while(action != 5);
 }
 
 int main() {
