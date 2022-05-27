@@ -218,6 +218,25 @@ void addMenu(Library* library){
   printf("Votre livre à bien été ajouté. Félicitations !\n");
 }
 
+void removeMenu(Library* library){
+  if(library->bookCount==0){
+    printf("Votre bibliothèque ne contient aucun livre !\n");
+    return;
+  }
+  int id;
+  bool valid;
+  do {
+    printf("Entrez l'ID du livre à supprimer.\n");
+    scanf("%d", &id);
+    clear(stdin);
+    valid =getBook(*library, id) !=NULL;
+    if(!valid) printf("Aucun livre ne correspond à cet identifiant !\n");
+  } while(!valid);
+  removeBook(library,id);
+  printf("Le livre a bien été supprimé. Félicitations !\n");
+}
+
+
 void promoteMenu(Library library, char* current) {
  User* target;
  char* name=safeMalloc(sizeof(char)*101);
@@ -258,12 +277,12 @@ void mainMenu(Library* library, User* user) {
 }
 
 void adminMainMenu(Library* library, User* user) {
-  char* choices[7]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Promouvoir un utilisateur","Quitter"};
+  char* choices[8]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
   int action;
   do{
     system("clear");
     showBooks(library->books, library->bookCount, NO_FIELD);
-    action = askInt("Sélectionnez une action", choices, 7);
+    action = askInt("Sélectionnez une action", choices, 8);
     switch (action) {
       case 0:
        borrowMenu(*library, user);
@@ -281,12 +300,15 @@ void adminMainMenu(Library* library, User* user) {
        addMenu(library);
        break;
       case 5:
-       promoteMenu(*library, user->login);
+       removeMenu(library);
        break;
       case 6:
+       promoteMenu(*library, user->login);
+       break;
+      case 7:
        break;
     }
-  }while(action != 6);
+  }while(action != 7);
 }
 
 int main() {

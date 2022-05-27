@@ -85,6 +85,9 @@ void deliverBook(Book* book);
 //Add a book to the library
 void addBook(Library* library,Book book);
 
+//Remove a book from the library
+void removeBook(Library* library,int id);
+
 
 
 #endif
