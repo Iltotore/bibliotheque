@@ -185,6 +185,39 @@ void mercyMenu(Library library){
   printf("L'utilisateur a bien été réabilité.\n");
 }
 
+void addMenu(Library* library){
+  Book book;
+  book.title =safeMalloc(sizeof(char)*101);
+  book.author=safeMalloc(sizeof(char)*101);
+  book.borrower=NULL;
+  book.deliveryDate=safeMalloc(sizeof(struct tm));
+  time_t t = 0;
+  *(book.deliveryDate) = *(localtime(&t));
+  printf("Quel est le titre de votre livre ?\n");
+  scanf("%100[^\n]",book.title);
+  clear(stdin);
+  printf("Quel est le l'auteur de votre livre ?\n");
+  scanf("%100[^\n]",book.author);
+  clear(stdin);
+  bool valid;
+
+  do {
+    printf("Quel est l'identifiant de votre livre ?\n");
+    scanf("%d",&book.id);
+    clear(stdin);
+    valid=getBook(*library, book.id)==NULL;
+    if(!valid) printf("L'identifiant est déjà utilisé !\n");
+  } while(!valid);
+
+  char* choices[4];
+  for(int i=0;i<4;i++){
+    choices[i]= categoryToString((Category) i);
+  }
+  book.category=(Category) askInt("Quelle est la catégorie de votre livre ?",choices,4);
+  addBook(library,book);
+  printf("Votre livre à bien été ajouté. Félicitations !\n");
+}
+
 void promoteMenu(Library library, char* current) {
  User* target;
  char* name=safeMalloc(sizeof(char)*101);
@@ -225,7 +258,7 @@ void mainMenu(Library* library, User* user) {
 }
 
 void adminMainMenu(Library* library, User* user) {
-  char* choices[6]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
+  char* choices[7]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Promouvoir un utilisateur","Quitter"};
   int action;
   do{
     system("clear");
@@ -245,12 +278,15 @@ void adminMainMenu(Library* library, User* user) {
        mercyMenu(*library);
        break;
       case 4:
-       promoteMenu(*library, user->login);
+       addMenu(library);
        break;
       case 5:
+       promoteMenu(*library, user->login);
+       break;
+      case 6:
        break;
     }
-  }while(action != 5);
+  }while(action != 6);
 }
 
 int main() {

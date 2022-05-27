@@ -16,6 +16,7 @@ char* categoryToString(Category category) {
     case LITERATURE: return "Literature";
     case FICTION: return "Fiction";
     case GENERAL_KNOWLEDGE: return "Culture Generale";
+    default: return "???";
   }
 }
 
@@ -28,7 +29,6 @@ char* completeWithString(char* base, int length, char* str) {
   strcat(result, base);
 
   int step = strlen(str);
-  int allocated = currentLength+1;
   for(int i = 0; i < length-currentLength; i+=step) strcat(result, str);
   return result;
 }

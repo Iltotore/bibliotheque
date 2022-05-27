@@ -4,6 +4,7 @@
 #include <time.h>
 #include "model.h"
 #include "util.h"
+#include "gui.h"
 
 //Get the User with the given name from the given Library.
 User* getUser(Library lib,char* login){
@@ -114,10 +115,9 @@ void deliverBook(Book* book) {
 void addBook(Library* library,Book book) {
   int newCount = library->bookCount+1;
   Book* books = safeMalloc(sizeof(Book)*newCount);
-  for(int i = 0; i < newCount; i++) books[i] = library->books[i];
+  for(int i = 0; i < newCount-1; i++) books[i] = library->books[i];
 
   books[newCount-1] = book;
-
   library->books = books;
   library->bookCount = newCount;
 
