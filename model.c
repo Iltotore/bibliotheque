@@ -109,4 +109,16 @@ void deliverBook(Book* book) {
 
   time_t t = 0;
   *(book->deliveryDate) = *(localtime(&t));
+
+}
+void addBook(Library* library,Book book) {
+  int newCount = library->bookCount+1;
+  Book* books = safeMalloc(sizeof(Book)*newCount);
+  for(int i = 0; i < newCount; i++) books[i] = library->books[i];
+
+  books[newCount-1] = book;
+
+  library->books = books;
+  library->bookCount = newCount;
+
 }

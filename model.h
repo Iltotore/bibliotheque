@@ -66,6 +66,7 @@ User* registerUser(Library* library, char* login, char* password);
 
 void promoteUser(User* user);
 
+
 //Get the book with the given id from the given Library.
 Book* getBook(Library library, int id);
 
@@ -80,5 +81,10 @@ void borrowBook(User* user, Book* book);
 
 //Make the given user deliver a borrowed book.
 void deliverBook(Book* book);
+
+//Add a book to the library
+void addBook(Library* library,Book book);
+
+
 
 #endif
