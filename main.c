@@ -18,16 +18,10 @@ User* loginMenu(Library library) {
   do{
     if(i==3){
       printf("Le nombre maximal d'essais a été atteint.\n");
-      return 0;
+      exit(0);
     }
-    char* login = safeMalloc(sizeof(char)*100);
-    char* password =safeMalloc(sizeof(char)*100);
-    printf("Saisissez votre nom d'utilisateur :\n");
-    scanf("%100s",login);
-    clear(stdin);
-    printf("Saisissez votre mot de passe :\n");
-    scanf("%100s",password);
-    clear(stdin);
+    char* login = askString("Saisissez votre nom d'utilisateur:", 100);
+    char* password = askString("Saisissez votre mot de passe:", 100);
     user = authenticateUser(library,login,password);
     if (user == NULL) printf("Vos identifiants sont incorrects, veuillez réessayer.\n");
     i++;
@@ -39,22 +33,18 @@ User* loginMenu(Library library) {
 //Register sub menu
 User* registerMenu(Library* library) {
   User* existing = NULL;
-  char* login = safeMalloc(sizeof(char)*101);
+  char* login;
+  char* password;
   do {
-    printf("Saisissez votre nom d'utilisateur :\n");
-    scanf("%100s", login);
-    clear(stdin);
+    login = askString("Saisissez votre nom d'utilisateur:", 100);
     existing = getUser(*library, login);
     if(existing != NULL) printf("Ce nom est déjà pris.\n");
   } while(existing != NULL);
 
-  char* password = safeMalloc(sizeof(char)*101);
   bool valid = false;
   do {
     valid = true;
-    printf("Saisissez votre mot de passe:\n");
-    scanf("%100s", password);
-    clear(stdin);
+    password = askString("Saisissez votre mot de passe:", 100);
     if(strlen(password) < 8) {
       printf("Le mot de passe doit avoir une longueur minimale de 8.\n");
       valid = false;
@@ -147,12 +137,10 @@ char* deliverMenu(Library library, User* user) {
 
 char* banMenu(Library library,char* current){
   User* target;
-  char* name=safeMalloc(sizeof(char)*101);
+  char* name;
   do{
-    printf("Quel utilisateur souhaitez vous bannir ?\n");
-    scanf("%100s",name);
-    clear(stdin);
-    target= getUser(library,name);
+    name = askString("Quel utilisateur souhaitez-vous bannir ?", 100);
+    target = getUser(library,name);
     if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
     if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous bannir vous-même !\n");
   }while(target==NULL || strcmp(name, current) == 0);
@@ -164,11 +152,8 @@ char* banMenu(Library library,char* current){
 
 char* mercyMenu(Library library){
   User* target;
-  char* name=safeMalloc(sizeof(char)*101);
   do{
-    printf("Quel utilisateur souhaitez vous réabiliter ?\n");
-    scanf("%100s",name);
-    clear(stdin);
+    char* name = askString("Quel utilisateur souhaitez-vous réhabiliter ?", 100);
     target= getUser(library,name);
     if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
   }while(target==NULL);
@@ -180,18 +165,12 @@ char* mercyMenu(Library library){
 
 char* addMenu(Library* library){
   Book book;
-  book.title =safeMalloc(sizeof(char)*101);
-  book.author=safeMalloc(sizeof(char)*101);
   book.borrower=NULL;
   book.deliveryDate=safeMalloc(sizeof(struct tm));
   time_t t = 0;
   *(book.deliveryDate) = *(localtime(&t));
-  printf("Quel est le titre de votre livre ?\n");
-  scanf("%100[^\n]",book.title);
-  clear(stdin);
-  printf("Quel est le l'auteur de votre livre ?\n");
-  scanf("%100[^\n]",book.author);
-  clear(stdin);
+  book.title = askString("Quel est le titre de votre livre ?", 100);
+  book.author = askString("Qui est l'auteur de votre livre ?", 100);
   bool valid;
 
   do {
@@ -219,7 +198,7 @@ char* removeMenu(Library* library){
     printf("Entrez l'ID du livre à supprimer.\n");
     scanf("%d", &id);
     clear(stdin);
-    valid =getBook(*library, id) !=NULL;
+    valid = getBook(*library, id) != NULL;
     if(!valid) printf("Aucun livre ne correspond à cet identifiant !\n");
   } while(!valid);
   removeBook(library,id);
@@ -228,11 +207,9 @@ char* removeMenu(Library* library){
 
 char* promoteMenu(Library library, char* current) {
  User* target;
- char* name=safeMalloc(sizeof(char)*101);
+ char* name;
  do{
-   printf("Quel utilisateur souhaitez vous promouvoir ?\n");
-   scanf("%100s",name);
-   clear(stdin);
+   name = askString("Quel utilisateur souhaitez-vous promouvoir ?", 100);
    target= getUser(library,name);
    if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
    if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous promouvoir vous-même.\n");

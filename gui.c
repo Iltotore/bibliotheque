@@ -94,6 +94,18 @@ void showBooks(Book books[], int length, Field focused) {
   printf("%s\n", completeWithString("", totalLength+1, "-"));
 }
 
+//Ask the user to enter a string (char*).
+char* askString(char* message, int maxLength) {
+  char* answer = safeMalloc(sizeof(char)*(maxLength+1));
+  printf("%s\n", message);
+  char* format = safeMalloc(sizeof(char)*(3 + lengthOfInt(maxLength)));
+  sprintf(format, "%%%ds", maxLength);
+  scanf(format, answer);
+  clear(stdin);
+
+  return answer;
+}
+
 //Ask the user to select one of the given choices (represented by an int).
 int askInt(char* message, char* choices[], int length) {
   printf("%s\n", message);
