@@ -94,16 +94,10 @@ User* registerMenu(Library* library) {
   return user;
 }
 
-void borrowMenu(Library library, User* user) {
-  if(remaining(library, user) == 0) {
-    printf("Vous ne pouvez pas emprunter plus de livre !\n");
-    return;
-  }
+char* borrowMenu(Library library, User* user) {
+  if(remaining(library, user) == 0) return "Vous ne pouvez pas emprunter plus de livre !";
 
-  if(user->blacklisted) {
-    printf("Vous n'avez pas le droit d'emprunter de livre. Si il s'agit d'une erreur, contactez votre administrateur\n");
-    return;
-  }
+  if(user->blacklisted) return "Vous n'avez pas le droit d'emprunter de livre. Si il s'agit d'une erreur, contactez votre administrateur";
 
   Book* target;
   do {
@@ -118,18 +112,17 @@ void borrowMenu(Library library, User* user) {
 
   borrowBook(user, target);
 
-  printf("Livre emprunté.\n");
+  return "Livre emprunté.";
 }
 
-void deliverMenu(Library library, User* user) {
+char* deliverMenu(Library library, User* user) {
   Book* target;
 
   int length;
   Book* borrowed = borrowedBooks(library, user, &length);
 
   if(length == 0) {
-    printf("Vous n'avez emprunté aucun livre.\n");
-    return;
+    return "Vous n'avez emprunté aucun livre.";
   }
 
   do {
@@ -148,11 +141,11 @@ void deliverMenu(Library library, User* user) {
 
   deliverBook(target);
 
-  printf("Livre rendu.\n");
-  if(user->blacklisted) printf("Attention: Vous avez été banni automatiquement pour remise en retard. Pour ne plus être banni, contactez votre administrateur.\n");
+  if(user->blacklisted) return "Attention: Vous avez été banni automatiquement pour remise en retard. Pour ne plus être banni, contactez votre administrateur.";
+  return "Livre rendu.";
 }
 
-void banMenu(Library library,char* current){
+char* banMenu(Library library,char* current){
   User* target;
   char* name=safeMalloc(sizeof(char)*101);
   do{
@@ -166,10 +159,10 @@ void banMenu(Library library,char* current){
 
   target->blacklisted = true;
 
-  printf("L'utilisateur a bien été banni.\n");
+  return "L'utilisateur a bien été banni.";
 }
 
-void mercyMenu(Library library){
+char* mercyMenu(Library library){
   User* target;
   char* name=safeMalloc(sizeof(char)*101);
   do{
@@ -182,10 +175,10 @@ void mercyMenu(Library library){
 
   target->blacklisted = false;
 
-  printf("L'utilisateur a bien été réabilité.\n");
+  return "L'utilisateur a bien été réabilité.";
 }
 
-void addMenu(Library* library){
+char* addMenu(Library* library){
   Book book;
   book.title =safeMalloc(sizeof(char)*101);
   book.author=safeMalloc(sizeof(char)*101);
@@ -215,14 +208,11 @@ void addMenu(Library* library){
   }
   book.category=(Category) askInt("Quelle est la catégorie de votre livre ?",choices,4);
   addBook(library,book);
-  printf("Votre livre à bien été ajouté. Félicitations !\n");
+  return "Votre livre à bien été ajouté. Félicitations !";
 }
 
-void removeMenu(Library* library){
-  if(library->bookCount==0){
-    printf("Votre bibliothèque ne contient aucun livre !\n");
-    return;
-  }
+char* removeMenu(Library* library){
+  if(library->bookCount==0) return "Votre bibliothèque ne contient aucun livre !";
   int id;
   bool valid;
   do {
@@ -233,11 +223,10 @@ void removeMenu(Library* library){
     if(!valid) printf("Aucun livre ne correspond à cet identifiant !\n");
   } while(!valid);
   removeBook(library,id);
-  printf("Le livre a bien été supprimé. Félicitations !\n");
+  return "Le livre a bien été supprimé. Félicitations !";
 }
 
-
-void promoteMenu(Library library, char* current) {
+char* promoteMenu(Library library, char* current) {
  User* target;
  char* name=safeMalloc(sizeof(char)*101);
  do{
@@ -249,26 +238,26 @@ void promoteMenu(Library library, char* current) {
    if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous promouvoir vous-même.\n");
  }while(target==NULL || strcmp(name, current) == 0);
 
- if(target->role == ADMINISTRATOR) printf("L'utilisateur est déjà un administrateur\n");
- else {
-   promoteUser(target);
-   printf("L'utilisateur a bien été promu\n");
- }
+ if(target->role == ADMINISTRATOR) return "L'utilisateur est déjà un administrateur";
+ promoteUser(target);
+ return "L'utilisateur a bien été promu";
 }
 
 void mainMenu(Library* library, User* user) {
   char* choices[3]={"Emprunter un livre", "Rendre un livre", "Quitter"};
   int action;
+  char* result = NULL;
   do{
     system("clear");
     showBooks(library->books, library->bookCount, NO_FIELD);
+    if(result != NULL) printf("> %s\n", result);
     action = askInt("Sélectionnez une action", choices, 3);
     switch (action) {
       case 0:
-       borrowMenu(*library, user);
+       result = borrowMenu(*library, user);
        break;
       case 1:
-       deliverMenu(*library, user);
+       result = deliverMenu(*library, user);
        break;
       case 2:
        break;
@@ -279,31 +268,33 @@ void mainMenu(Library* library, User* user) {
 void adminMainMenu(Library* library, User* user) {
   char* choices[8]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
   int action;
+  char* result = NULL;
   do{
     system("clear");
     showBooks(library->books, library->bookCount, NO_FIELD);
+    if(result != NULL) printf("> %s\n", result);
     action = askInt("Sélectionnez une action", choices, 8);
     switch (action) {
       case 0:
-       borrowMenu(*library, user);
+       result = borrowMenu(*library, user);
        break;
       case 1:
-       deliverMenu(*library, user);
+       result = deliverMenu(*library, user);
        break;
       case 2:
-       banMenu(*library,user->login);
+       result = banMenu(*library,user->login);
        break;
       case 3:
-       mercyMenu(*library);
+       result = mercyMenu(*library);
        break;
       case 4:
-       addMenu(library);
+       result = addMenu(library);
        break;
       case 5:
-       removeMenu(library);
+       result = removeMenu(library);
        break;
       case 6:
-       promoteMenu(*library, user->login);
+       result = promoteMenu(*library, user->login);
        break;
       case 7:
        break;
