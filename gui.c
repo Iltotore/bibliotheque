@@ -98,8 +98,8 @@ void showBooks(Book books[], int length, Field focused) {
 char* askString(char* message, int maxLength) {
   char* answer = safeMalloc(sizeof(char)*(maxLength+1));
   printf("%s\n", message);
-  char* format = safeMalloc(sizeof(char)*(3 + lengthOfInt(maxLength)));
-  sprintf(format, "%%%ds", maxLength);
+  char* format = safeMalloc(sizeof(char)*(5 + lengthOfInt(maxLength)));
+  sprintf(format, "%%%d[^\n]", maxLength);
   scanf(format, answer);
   clear(stdin);
 
