@@ -206,18 +206,18 @@ char* removeMenu(Library* library){
 }
 
 char* promoteMenu(Library library, char* current) {
- User* target;
- char* name;
- do{
-   name = askString("Quel utilisateur souhaitez-vous promouvoir ?", 100);
-   target= getUser(library,name);
-   if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
-   if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous promouvoir vous-même.\n");
- }while(target==NULL || strcmp(name, current) == 0);
+  User* target;
+  char* name;
+  do{
+    name = askString("Quel utilisateur souhaitez-vous promouvoir ?", 100);
+    target= getUser(library,name);
+    if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
+    if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous promouvoir vous-même.\n");
+  }while(target==NULL || strcmp(name, current) == 0);
 
- if(target->role == ADMINISTRATOR) return "L'utilisateur est déjà un administrateur";
- promoteUser(target);
- return "L'utilisateur a bien été promu";
+  if(target->role == ADMINISTRATOR) return "L'utilisateur est déjà un administrateur";
+  promoteUser(target);
+  return "L'utilisateur a bien été promu";
 }
 
 void mainMenu(Library* library, User* user) {
@@ -231,13 +231,13 @@ void mainMenu(Library* library, User* user) {
     action = askInt("Sélectionnez une action", choices, 3);
     switch (action) {
       case 0:
-       result = borrowMenu(*library, user);
-       break;
+      result = borrowMenu(*library, user);
+      break;
       case 1:
-       result = deliverMenu(*library, user);
-       break;
+      result = deliverMenu(*library, user);
+      break;
       case 2:
-       break;
+      break;
     }
   }while(action != 2);
 }
@@ -253,28 +253,28 @@ void adminMainMenu(Library* library, User* user) {
     action = askInt("Sélectionnez une action", choices, 8);
     switch (action) {
       case 0:
-       result = borrowMenu(*library, user);
-       break;
+      result = borrowMenu(*library, user);
+      break;
       case 1:
-       result = deliverMenu(*library, user);
-       break;
+      result = deliverMenu(*library, user);
+      break;
       case 2:
-       result = banMenu(*library,user->login);
-       break;
+      result = banMenu(*library,user->login);
+      break;
       case 3:
-       result = mercyMenu(*library);
-       break;
+      result = mercyMenu(*library);
+      break;
       case 4:
-       result = addMenu(library);
-       break;
+      result = addMenu(library);
+      break;
       case 5:
-       result = removeMenu(library);
-       break;
+      result = removeMenu(library);
+      break;
       case 6:
-       result = promoteMenu(*library, user->login);
-       break;
+      result = promoteMenu(*library, user->login);
+      break;
       case 7:
-       break;
+      break;
     }
   }while(action != 7);
 }
@@ -300,11 +300,11 @@ int main() {
 
   switch(askInt("Bonjour !", logChoices, 2)) {
     case 0:
-      user = loginMenu(library);
-      break;
+    user = loginMenu(library);
+    break;
     case 1:
-      user = registerMenu(&library);
-      break;
+    user = registerMenu(&library);
+    break;
   }
 
   if(user->role == ADMINISTRATOR) adminMainMenu(&library, user);
