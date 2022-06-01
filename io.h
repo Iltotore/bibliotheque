@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "model.h"
+#define KEY "A"
 #ifndef io
 #define io
 
