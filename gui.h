@@ -3,9 +3,6 @@
 #ifndef gui
 #define gui
 
-//Return a string representation of the given Category.
-char* categoryToString(Category category);
-
 //Display the given book array with the given length. A specific field can be highlighted.
 void showBooks(Book books[], int length, Field focused);
 

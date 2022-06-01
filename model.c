@@ -136,3 +136,90 @@ void removeBook(Library* library,int id){
   library->books = books;
   library->bookCount = newCount;
 }
+
+//Compare two ints. Similar to strcmp.
+int intcmp(int a, int b) {
+  if(a == b) return 0;
+  if(a > b) return 1;
+  return -1;
+}
+
+//Compare two books by a particular field.
+int compareBooks(Book a, Book b, Field field) {
+  switch (field) {
+    case TITLE: return strcmp(a.title, b.title);
+    case AUTHOR: return strcmp(a.author, b.author);
+    case ID: return intcmp(a.id, b.id);
+    case CATEGORY: return strcmp(categoryToString(a.category), categoryToString(b.category));
+    case BORROWER:
+      if(a.borrower == b.borrower) return 0;
+      if(b.borrower == NULL) return 1;
+      if(a.borrower == NULL) return -1;
+      return strcmp(a.borrower->login, b.borrower->login);
+    case DELIVERY_DATE: return intcmp(mktime(a.deliveryDate), mktime(b.deliveryDate));
+    default:
+      return compareBooks(a, b, TITLE); //Compare by title by default
+  }
+}
+
+int partitioning(Book books[], Field field, int begin, int end) {
+  int firstGreater = begin;
+  int firstLess = end;
+  Book tmp;
+
+  while(firstGreater < firstLess) {
+    while(compareBooks(books[firstGreater], books[begin], field) <= 0 && firstGreater < end) firstGreater++;
+    while(compareBooks(books[firstLess], books[begin], field) > 0) firstLess--;
+
+    if(firstGreater < firstLess) {
+      tmp = books[firstGreater];
+      books[firstGreater] = books[firstLess];
+      books[firstLess] = tmp;
+    }
+  }
+
+  tmp = books[begin];
+  books[begin] = books[firstLess];
+  books[firstLess] = tmp;
+  return firstLess;
+}
+
+void quickSortBook(Book books[], Field field, int begin, int end) {
+  int pivot;
+  if(begin < end) {
+    pivot = partitioning(books, field, begin, end);
+    quickSortBook(books, field, begin, pivot-1);
+    quickSortBook(books, field, pivot+1, end);
+  }
+}
+
+//Sort an array of book by a particular field. Return a new array.
+Book* sortBooks(Book* books, int length, Field field) {
+  Book* sorted = safeMalloc(sizeof(Book)*length);
+  for(int i = 0; i < length; i++) sorted[i] = books[i];
+  quickSortBook(sorted, field, 0, length-1);
+  return sorted;
+}
+
+//Return a string representation of the given Category.
+char* categoryToString(Category category) {
+  switch (category) {
+    case SCIENCES: return "Sciences";
+    case LITERATURE: return "Literature";
+    case FICTION: return "Fiction";
+    case GENERAL_KNOWLEDGE: return "Culture Generale";
+    default: return "???";
+  }
+}
+
+char* fieldToString(Field field) {
+  switch (field) {
+    case TITLE: return "Titre";
+    case AUTHOR: return "Auteur";
+    case ID: return "ID";
+    case CATEGORY: return "Catégorie";
+    case BORROWER: return "Emprunté par";
+    case DELIVERY_DATE: return "Date de remise";
+    default: return "Aucun attribut";
+  }
+}

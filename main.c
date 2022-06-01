@@ -84,6 +84,15 @@ User* registerMenu(Library* library) {
   return user;
 }
 
+char* sortMenu(Field* field) {
+  char* choices[7];
+  for(int i=0;i<7;i++){
+    choices[i]= fieldToString((Field) i);
+  }
+  *field=(Field) askInt("Par quel attribut voulez-vous trier les livres ?",choices,7);
+  return "Livres triés.";
+}
+
 char* borrowMenu(Library library, User* user) {
   if(remaining(library, user) == 0) return "Vous ne pouvez pas emprunter plus de livre !";
 
@@ -221,66 +230,73 @@ char* promoteMenu(Library library, char* current) {
 }
 
 void mainMenu(Library* library, User* user) {
-  char* choices[3]={"Emprunter un livre", "Rendre un livre", "Quitter"};
+  char* choices[4]={"Trier les livres", "Emprunter un livre", "Rendre un livre", "Quitter"};
   int action;
   char* result = NULL;
+  Field focused = NO_FIELD;
   do{
     system("clear");
-    showBooks(library->books, library->bookCount, NO_FIELD);
+    showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
     if(result != NULL) printf("> %s\n", result);
-    action = askInt("Sélectionnez une action", choices, 3);
+    action = askInt("Sélectionnez une action", choices, 4);
     switch (action) {
       case 0:
+       result = sortMenu(&focused);
+       break;
+      case 1:
       result = borrowMenu(*library, user);
       break;
-      case 1:
+      case 2:
       result = deliverMenu(*library, user);
       break;
-      case 2:
+      case 3:
       break;
     }
-  }while(action != 2);
+  }while(action != 3);
 }
 
 void adminMainMenu(Library* library, User* user) {
-  char* choices[8]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
+  char* choices[9]={"Trier les livres", "Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
   int action;
   char* result = NULL;
+  Field focused = NO_FIELD;
   do{
     system("clear");
-    showBooks(library->books, library->bookCount, NO_FIELD);
+    showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
     if(result != NULL) printf("> %s\n", result);
-    action = askInt("Sélectionnez une action", choices, 8);
+    action = askInt("Sélectionnez une action", choices, 9);
     switch (action) {
       case 0:
+       result = sortMenu(&focused);
+       break;
+      case 1:
       result = borrowMenu(*library, user);
       break;
-      case 1:
+      case 2:
       result = deliverMenu(*library, user);
       break;
-      case 2:
+      case 3:
       result = banMenu(*library,user->login);
       break;
-      case 3:
+      case 4:
       result = mercyMenu(*library);
       break;
-      case 4:
+      case 5:
       result = addMenu(library);
       break;
-      case 5:
+      case 6:
       result = removeMenu(library);
       break;
-      case 6:
+      case 7:
       result = promoteMenu(*library, user->login);
       break;
-      case 7:
+      case 8:
       break;
     }
-  }while(action != 7);
+  }while(action != 8);
 }
 
 int main() {
-  srand(time(NULL));
 
   FILE* bookFile = fopen("./books.csv", "r");
   FILE* userFile = fopen("./users.csv", "r");
@@ -311,7 +327,6 @@ int main() {
   else mainMenu(&library, user);
 
   printf("Au revoir et à bientôt ! Parce que lire c'est grandir !\n");
-
 
   bookFile = fopen("./books.csv", "w");
   userFile = fopen("./users.csv", "w");

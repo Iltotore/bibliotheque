@@ -9,17 +9,6 @@
 #define FOCUS_STYLE "\x1b[1m"
 #define FOCUS_RESET "\x1b[0m"
 
-//Return a string representation of the given Category.
-char* categoryToString(Category category) {
-  switch (category) {
-    case SCIENCES: return "Sciences";
-    case LITERATURE: return "Literature";
-    case FICTION: return "Fiction";
-    case GENERAL_KNOWLEDGE: return "Culture Generale";
-    default: return "???";
-  }
-}
-
 //Extend a string using the given char sequence `str`.
 char* completeWithString(char* base, int length, char* str) {
   int currentLength = strlen(base);
