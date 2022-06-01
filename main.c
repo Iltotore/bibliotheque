@@ -11,7 +11,7 @@
 #define DIGITS "123456789"
 
 
-//Login sub menu
+//Login sub menu.
 User* loginMenu(Library library) {
   int i=0;
   User* user;
@@ -30,7 +30,7 @@ User* loginMenu(Library library) {
   return user;
 }
 
-//Register sub menu
+//Register sub menu.
 User* registerMenu(Library* library) {
   User* existing = NULL;
   char* login;
@@ -84,6 +84,7 @@ User* registerMenu(Library* library) {
   return user;
 }
 
+//Book sort sub menu.
 char* sortMenu(Field* field) {
   char* choices[7];
   for(int i=0;i<7;i++){
@@ -93,6 +94,7 @@ char* sortMenu(Field* field) {
   return "Livres triés.";
 }
 
+//Borrow sub menu.
 char* borrowMenu(Library library, User* user) {
   if(remaining(library, user) == 0) return "Vous ne pouvez pas emprunter plus de livre !";
 
@@ -114,6 +116,7 @@ char* borrowMenu(Library library, User* user) {
   return "Livre emprunté.";
 }
 
+//Delivery sub menu.
 char* deliverMenu(Library library, User* user) {
   Book* target;
 
@@ -144,6 +147,7 @@ char* deliverMenu(Library library, User* user) {
   return "Livre rendu.";
 }
 
+//Ban sub menu.
 char* banMenu(Library library,char* current){
   User* target;
   char* name;
@@ -159,6 +163,7 @@ char* banMenu(Library library,char* current){
   return "L'utilisateur a bien été banni.";
 }
 
+//Mercy sub menu.
 char* mercyMenu(Library library){
   User* target;
   do{
@@ -172,6 +177,7 @@ char* mercyMenu(Library library){
   return "L'utilisateur a bien été réabilité.";
 }
 
+//Add book sub menu.
 char* addMenu(Library* library){
   Book book;
   book.borrower=NULL;
@@ -199,6 +205,7 @@ char* addMenu(Library* library){
   return "Votre livre à bien été ajouté. Félicitations !";
 }
 
+//Remove book sub menu.
 char* removeMenu(Library* library){
   if(library->bookCount==0) return "Votre bibliothèque ne contient aucun livre !";
   int id;
@@ -214,6 +221,7 @@ char* removeMenu(Library* library){
   return "Le livre a bien été supprimé. Félicitations !";
 }
 
+//Promote user sub menu.
 char* promoteMenu(Library library, char* current) {
   User* target;
   char* name;
@@ -229,6 +237,7 @@ char* promoteMenu(Library library, char* current) {
   return "L'utilisateur a bien été promu";
 }
 
+//Main menu (students and teachers).
 void mainMenu(Library* library, User* user) {
   char* choices[4]={"Trier les livres", "Emprunter un livre", "Rendre un livre", "Quitter"};
   int action;
@@ -255,6 +264,7 @@ void mainMenu(Library* library, User* user) {
   }while(action != 3);
 }
 
+//Main menu (administrators).
 void adminMainMenu(Library* library, User* user) {
   char* choices[9]={"Trier les livres", "Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
   int action;
@@ -296,6 +306,7 @@ void adminMainMenu(Library* library, User* user) {
   }while(action != 8);
 }
 
+//Program entrypoint
 int main() {
 
   FILE* bookFile = fopen("./books.csv", "r");

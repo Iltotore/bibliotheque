@@ -94,9 +94,10 @@ int compareBooks(Book a, Book b, Field field);
 //Sort an array of book by a particular field. Return a new array.
 Book* sortBooks(Book* books, int length, Field field);
 
+//Return the string representation of the given Field.
 char* fieldToString(Field field);
 
-//Return a string representation of the given Category.
+//Return the string representation of the given Category.
 char* categoryToString(Category category);
 
 #endif

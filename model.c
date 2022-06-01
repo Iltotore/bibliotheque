@@ -111,6 +111,8 @@ void deliverBook(Book* book) {
   *(book->deliveryDate) = *(localtime(&t));
 
 }
+
+//Get the book with the given id from the given Library.
 void addBook(Library* library,Book book) {
   int newCount = library->bookCount+1;
   Book* books = safeMalloc(sizeof(Book)*newCount);
@@ -121,6 +123,7 @@ void addBook(Library* library,Book book) {
   library->bookCount = newCount;
 
 }
+
 //Remove a book from the library
 void removeBook(Library* library,int id){
   int newCount=library->bookCount-1;
@@ -162,6 +165,7 @@ int compareBooks(Book a, Book b, Field field) {
   }
 }
 
+//Place the pivot in sorted list at its correct position.
 int partitioning(Book books[], Field field, int begin, int end) {
   int firstGreater = begin;
   int firstLess = end;
@@ -184,6 +188,7 @@ int partitioning(Book books[], Field field, int begin, int end) {
   return firstLess;
 }
 
+//Sort a book list using the quicksort algorithm.
 void quickSortBook(Book books[], Field field, int begin, int end) {
   int pivot;
   if(begin < end) {
@@ -212,6 +217,7 @@ char* categoryToString(Category category) {
   }
 }
 
+//
 char* fieldToString(Field field) {
   switch (field) {
     case TITLE: return "Titre";
