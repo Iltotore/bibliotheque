@@ -5,10 +5,11 @@
 #include "io.h"
 #include "model.h"
 #include "util.h"
+#include "cypher.h"
 
 //Save the given user in the given file.
 void saveUser(User user, FILE* file) {
-  fprintf(file, "%s,%s,%d,%d\n", user.login, user.password, user.role, user.blacklisted);
+  fprintf(file, "%s,%s,%d,%d\n", user.login, encrypt(user.password,KEY), user.role, user.blacklisted);
 }
 
 //Load a user from the given file.
@@ -18,9 +19,10 @@ User loadUser(FILE* file) {
   int blacklisted;
 
   user.login = safeMalloc(sizeof(char)*101);
-  user.password = safeMalloc(sizeof(char)*101);
+  char* tempPassword = safeMalloc(sizeof(char)*101);
 
-  fscanf(file, "%100[^,],%100[^,],%d,%d\n", user.login, user.password, &roleId, &blacklisted);
+  fscanf(file, "%100[^,],%100[^,],%d,%d\n", user.login, tempPassword, &roleId, &blacklisted);
+  user.password=decrypt(tempPassword,KEY);
   user.role = (Role) roleId;
   user.blacklisted = (bool) blacklisted;
 
