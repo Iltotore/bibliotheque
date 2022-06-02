@@ -17,7 +17,7 @@ User* loginMenu(Library library) {
   User* user;
   do{
     if(i==3){
-      printf("Le nombre maximal d'essais a été atteint.\n");
+      printf("Le nombre maximal d'essais a été atteint!\n");
       exit(0);
     }
     char* login = askString("Saisissez votre nom d'utilisateur:", 100);
@@ -46,22 +46,22 @@ User* registerMenu(Library* library) {
     valid = true;
     password = askString("Saisissez votre mot de passe:", 100);
     if(strlen(password) < 8) {
-      printf("Le mot de passe doit avoir une longueur minimale de 8.\n");
+      printf("Le mot de passe doit avoir une longueur minimale de 8!\n");
       valid = false;
     }
 
     if(!strContainsAtLeast(password, UPPERS)) {
-      printf("Le mot de passe doit contenir au moins une majuscule.\n");
+      printf("Le mot de passe doit contenir au moins une majuscule!\n");
       valid = false;
     }
 
     if(!strContainsAtLeast(password, LOWERS)) {
-      printf("Le mot de passe doit contenir au moins une minuscule.\n");
+      printf("Le mot de passe doit contenir au moins une minuscule!\n");
       valid = false;
     }
 
     if(!strContainsAtLeast(password, DIGITS)) {
-      printf("Le mot de passe doit contenir au moins un chiffre.\n");
+      printf("Le mot de passe doit contenir au moins un chiffre!\n");
       valid = false;
     }
 
@@ -71,7 +71,7 @@ User* registerMenu(Library* library) {
       scanf("%100s", confirm);
       clear(stdin);
       if(strcmp(password, confirm) != 0) {
-        printf("Les deux mots de passe ne correspondent pas.\n");
+        printf("Les deux mots de passe ne correspondent pas!\n");
         valid = false;
       }
     }
@@ -79,7 +79,7 @@ User* registerMenu(Library* library) {
 
   printf("Création...\n");
   User* user = registerUser(library, login, password);
-  printf("Votre compte a bien été créé.\n");
+  printf("Votre compte a bien été créé. Bienvenue!\n");
 
   return user;
 }
@@ -108,7 +108,7 @@ char* borrowMenu(Library library, User* user) {
     clear(stdin);
     target = getBook(library, id);
 
-    if(target == NULL) printf("Aucun livre ne correspond à cet identifiant.\n");
+    if(target == NULL) printf("Aucun livre ne correspond à cet identifiant!\n");
   } while(target == NULL);
 
   borrowBook(user, target);
@@ -129,6 +129,7 @@ char* deliverMenu(Library library, User* user) {
 
   do {
     showBooks(borrowed, length, NO_FIELD);
+    printf("Vous ai-je déjà lu quelque part ?\n\n");
 
     int id;
     printf("Entrez l'ID du livre à rendre.\n");
@@ -138,7 +139,7 @@ char* deliverMenu(Library library, User* user) {
     target = getBook(library, id);
 
     if(target != NULL && target->borrower != user) target = NULL;
-    if(target == NULL) printf("Aucun livre ne correspond à cet identifiant.\n");
+    if(target == NULL) printf("Aucun livre ne correspond à cet identifiant!\n");
   } while(target == NULL);
 
   deliverBook(target);
@@ -169,7 +170,7 @@ char* mercyMenu(Library library){
   do{
     char* name = askString("Quel utilisateur souhaitez-vous réhabiliter ?", 100);
     target= getUser(library,name);
-    if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
+    if(target==NULL) printf("L'utilisateur sélectionné n'existe pas!\n");
   }while(target==NULL);
 
   target->blacklisted = false;
@@ -245,7 +246,9 @@ void mainMenu(Library* library, User* user) {
   Field focused = NO_FIELD;
   do{
     system("clear");
+      printf("Vous ai-je déjà lu quelque part\n");
     showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
+    printf("Vous ai-je déjà lu quelque part ?\n\n");
     if(result != NULL) printf("> %s\n", result);
     action = askInt("Sélectionnez une action", choices, 4);
     switch (action) {
@@ -273,6 +276,8 @@ void adminMainMenu(Library* library, User* user) {
   do{
     system("clear");
     showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
+    printf("Vous ai-je déjà lu quelque part ?\n\n");
+    
     if(result != NULL) printf("> %s\n", result);
     action = askInt("Sélectionnez une action", choices, 9);
     switch (action) {
