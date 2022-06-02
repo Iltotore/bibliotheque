@@ -11,7 +11,7 @@ clean:
 
 $(EXECUTABLE): $(SRCS)
 	@echo "Building application..."
-	@gcc $(SRCS) -o $(EXECUTABLE)
+	@gcc $(SRCS) -o $(EXECUTABLE) -Wall -Werror
 
 run: $(EXECUTABLE)
 	@echo "Running application..."

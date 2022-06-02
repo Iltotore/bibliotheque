@@ -11,23 +11,17 @@
 #define DIGITS "123456789"
 
 
-//Login sub menu
+//Login sub menu.
 User* loginMenu(Library library) {
   int i=0;
   User* user;
   do{
     if(i==3){
       printf("Le nombre maximal d'essais a été atteint.\n");
-      return 0;
+      exit(0);
     }
-    char* login = safeMalloc(sizeof(char)*100);
-    char* password =safeMalloc(sizeof(char)*100);
-    printf("Saisissez votre nom d'utilisateur :\n");
-    scanf("%100s",login);
-    clear(stdin);
-    printf("Saisissez votre mot de passe :\n");
-    scanf("%100s",password);
-    clear(stdin);
+    char* login = askString("Saisissez votre nom d'utilisateur:", 100);
+    char* password = askString("Saisissez votre mot de passe:", 100);
     user = authenticateUser(library,login,password);
     if (user == NULL) printf("Vos identifiants sont incorrects, veuillez réessayer.\n");
     i++;
@@ -36,25 +30,21 @@ User* loginMenu(Library library) {
   return user;
 }
 
-//Register sub menu
+//Register sub menu.
 User* registerMenu(Library* library) {
   User* existing = NULL;
-  char* login = safeMalloc(sizeof(char)*101);
+  char* login;
+  char* password;
   do {
-    printf("Saisissez votre nom d'utilisateur :\n");
-    scanf("%100s", login);
-    clear(stdin);
+    login = askString("Saisissez votre nom d'utilisateur:", 100);
     existing = getUser(*library, login);
     if(existing != NULL) printf("Ce nom est déjà pris.\n");
   } while(existing != NULL);
 
-  char* password = safeMalloc(sizeof(char)*101);
   bool valid = false;
   do {
     valid = true;
-    printf("Saisissez votre mot de passe:\n");
-    scanf("%100s", password);
-    clear(stdin);
+    password = askString("Saisissez votre mot de passe:", 100);
     if(strlen(password) < 8) {
       printf("Le mot de passe doit avoir une longueur minimale de 8.\n");
       valid = false;
@@ -94,16 +84,21 @@ User* registerMenu(Library* library) {
   return user;
 }
 
-void borrowMenu(Library library, User* user) {
-  if(remaining(library, user) == 0) {
-    printf("Vous ne pouvez pas emprunter plus de livre !\n");
-    return;
+//Book sort sub menu.
+char* sortMenu(Field* field) {
+  char* choices[7];
+  for(int i=0;i<7;i++){
+    choices[i]= fieldToString((Field) i);
   }
+  *field=(Field) askInt("Par quel attribut voulez-vous trier les livres ?",choices,7);
+  return "Livres triés.";
+}
 
-  if(user->blacklisted) {
-    printf("Vous n'avez pas le droit d'emprunter de livre. Si il s'agit d'une erreur, contactez votre administrateur\n");
-    return;
-  }
+//Borrow sub menu.
+char* borrowMenu(Library library, User* user) {
+  if(remaining(library, user) == 0) return "Vous ne pouvez pas emprunter plus de livre !";
+
+  if(user->blacklisted) return "Vous n'avez pas le droit d'emprunter de livre. Si il s'agit d'une erreur, contactez votre administrateur";
 
   Book* target;
   do {
@@ -118,18 +113,18 @@ void borrowMenu(Library library, User* user) {
 
   borrowBook(user, target);
 
-  printf("Livre emprunté.\n");
+  return "Livre emprunté.";
 }
 
-void deliverMenu(Library library, User* user) {
+//Delivery sub menu.
+char* deliverMenu(Library library, User* user) {
   Book* target;
 
   int length;
   Book* borrowed = borrowedBooks(library, user, &length);
 
   if(length == 0) {
-    printf("Vous n'avez emprunté aucun livre.\n");
-    return;
+    return "Vous n'avez emprunté aucun livre.";
   }
 
   do {
@@ -148,113 +143,171 @@ void deliverMenu(Library library, User* user) {
 
   deliverBook(target);
 
-  printf("Livre rendu.\n");
-  if(user->blacklisted) printf("Attention: Vous avez été banni automatiquement pour remise en retard. Pour ne plus être banni, contactez votre administrateur.\n");
+  if(user->blacklisted) return "Attention: Vous avez été banni automatiquement pour remise en retard. Pour ne plus être banni, contactez votre administrateur.";
+  return "Livre rendu.";
 }
 
-void banMenu(Library library,char* current){
+//Ban sub menu.
+char* banMenu(Library library,char* current){
   User* target;
-  char* name=safeMalloc(sizeof(char)*101);
+  char* name;
   do{
-    printf("Quel utilisateur souhaitez vous bannir ?\n");
-    scanf("%100s",name);
-    clear(stdin);
-    target= getUser(library,name);
+    name = askString("Quel utilisateur souhaitez-vous bannir ?", 100);
+    target = getUser(library,name);
     if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
     if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous bannir vous-même !\n");
   }while(target==NULL || strcmp(name, current) == 0);
 
   target->blacklisted = true;
 
-  printf("L'utilisateur a bien été banni.\n");
+  return "L'utilisateur a bien été banni.";
 }
 
-void mercyMenu(Library library){
+//Mercy sub menu.
+char* mercyMenu(Library library){
   User* target;
-  char* name=safeMalloc(sizeof(char)*101);
   do{
-    printf("Quel utilisateur souhaitez vous réabiliter ?\n");
-    scanf("%100s",name);
-    clear(stdin);
+    char* name = askString("Quel utilisateur souhaitez-vous réhabiliter ?", 100);
     target= getUser(library,name);
     if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
   }while(target==NULL);
 
   target->blacklisted = false;
 
-  printf("L'utilisateur a bien été réabilité.\n");
+  return "L'utilisateur a bien été réabilité.";
 }
 
-void promoteMenu(Library library, char* current) {
- User* target;
- char* name=safeMalloc(sizeof(char)*101);
- do{
-   printf("Quel utilisateur souhaitez vous promouvoir ?\n");
-   scanf("%100s",name);
-   clear(stdin);
-   target= getUser(library,name);
-   if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
-   if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous promouvoir vous-même.\n");
- }while(target==NULL || strcmp(name, current) == 0);
+//Add book sub menu.
+char* addMenu(Library* library){
+  Book book;
+  book.borrower=NULL;
+  book.deliveryDate=safeMalloc(sizeof(struct tm));
+  time_t t = 0;
+  *(book.deliveryDate) = *(localtime(&t));
+  book.title = askString("Quel est le titre de votre livre ?", 100);
+  book.author = askString("Qui est l'auteur de votre livre ?", 100);
+  bool valid;
 
- if(target->role == ADMINISTRATOR) printf("L'utilisateur est déjà un administrateur\n");
- else {
-   promoteUser(target);
-   printf("L'utilisateur a bien été promu\n");
- }
+  do {
+    printf("Quel est l'identifiant de votre livre ?\n");
+    scanf("%d",&book.id);
+    clear(stdin);
+    valid=getBook(*library, book.id)==NULL;
+    if(!valid) printf("L'identifiant est déjà utilisé !\n");
+  } while(!valid);
+
+  char* choices[4];
+  for(int i=0;i<4;i++){
+    choices[i]= categoryToString((Category) i);
+  }
+  book.category=(Category) askInt("Quelle est la catégorie de votre livre ?",choices,4);
+  addBook(library,book);
+  return "Votre livre à bien été ajouté. Félicitations !";
 }
 
+//Remove book sub menu.
+char* removeMenu(Library* library){
+  if(library->bookCount==0) return "Votre bibliothèque ne contient aucun livre !";
+  int id;
+  bool valid;
+  do {
+    printf("Entrez l'ID du livre à supprimer.\n");
+    scanf("%d", &id);
+    clear(stdin);
+    valid = getBook(*library, id) != NULL;
+    if(!valid) printf("Aucun livre ne correspond à cet identifiant !\n");
+  } while(!valid);
+  removeBook(library,id);
+  return "Le livre a bien été supprimé. Félicitations !";
+}
+
+//Promote user sub menu.
+char* promoteMenu(Library library, char* current) {
+  User* target;
+  char* name;
+  do{
+    name = askString("Quel utilisateur souhaitez-vous promouvoir ?", 100);
+    target= getUser(library,name);
+    if(target==NULL) printf("L'utilisateur sélectionné n'existe pas.\n");
+    if (strcmp(name, current) == 0) printf("Vous ne pouvez pas vous promouvoir vous-même.\n");
+  }while(target==NULL || strcmp(name, current) == 0);
+
+  if(target->role == ADMINISTRATOR) return "L'utilisateur est déjà un administrateur";
+  promoteUser(target);
+  return "L'utilisateur a bien été promu";
+}
+
+//Main menu (students and teachers).
 void mainMenu(Library* library, User* user) {
-  char* choices[3]={"Emprunter un livre", "Rendre un livre", "Quitter"};
+  char* choices[4]={"Trier les livres", "Emprunter un livre", "Rendre un livre", "Quitter"};
   int action;
+  char* result = NULL;
+  Field focused = NO_FIELD;
   do{
     system("clear");
-    showBooks(library->books, library->bookCount, NO_FIELD);
-    action = askInt("Sélectionnez une action", choices, 3);
+    showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
+    if(result != NULL) printf("> %s\n", result);
+    action = askInt("Sélectionnez une action", choices, 4);
     switch (action) {
       case 0:
-       borrowMenu(*library, user);
+       result = sortMenu(&focused);
        break;
       case 1:
-       deliverMenu(*library, user);
-       break;
+      result = borrowMenu(*library, user);
+      break;
       case 2:
-       break;
-    }
-  }while(action != 2);
-}
-
-void adminMainMenu(Library* library, User* user) {
-  char* choices[6]={"Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
-  int action;
-  do{
-    system("clear");
-    showBooks(library->books, library->bookCount, NO_FIELD);
-    action = askInt("Sélectionnez une action", choices, 7);
-    switch (action) {
-      case 0:
-       borrowMenu(*library, user);
-       break;
-      case 1:
-       deliverMenu(*library, user);
-       break;
-      case 2:
-       banMenu(*library,user->login);
-       break;
+      result = deliverMenu(*library, user);
+      break;
       case 3:
-       mercyMenu(*library);
-       break;
-      case 4:
-       promoteMenu(*library, user->login);
-       break;
-      case 5:
-       break;
+      break;
     }
-  }while(action != 5);
+  }while(action != 3);
 }
 
+//Main menu (administrators).
+void adminMainMenu(Library* library, User* user) {
+  char* choices[9]={"Trier les livres", "Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
+  int action;
+  char* result = NULL;
+  Field focused = NO_FIELD;
+  do{
+    system("clear");
+    showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
+    if(result != NULL) printf("> %s\n", result);
+    action = askInt("Sélectionnez une action", choices, 9);
+    switch (action) {
+      case 0:
+       result = sortMenu(&focused);
+       break;
+      case 1:
+      result = borrowMenu(*library, user);
+      break;
+      case 2:
+      result = deliverMenu(*library, user);
+      break;
+      case 3:
+      result = banMenu(*library,user->login);
+      break;
+      case 4:
+      result = mercyMenu(*library);
+      break;
+      case 5:
+      result = addMenu(library);
+      break;
+      case 6:
+      result = removeMenu(library);
+      break;
+      case 7:
+      result = promoteMenu(*library, user->login);
+      break;
+      case 8:
+      break;
+    }
+  }while(action != 8);
+}
+
+//Program entrypoint
 int main() {
-  srand(time(NULL));
 
   FILE* bookFile = fopen("./books.csv", "r");
   FILE* userFile = fopen("./users.csv", "r");
@@ -274,18 +327,17 @@ int main() {
 
   switch(askInt("Bonjour !", logChoices, 2)) {
     case 0:
-      user = loginMenu(library);
-      break;
+    user = loginMenu(library);
+    break;
     case 1:
-      user = registerMenu(&library);
-      break;
+    user = registerMenu(&library);
+    break;
   }
 
   if(user->role == ADMINISTRATOR) adminMainMenu(&library, user);
   else mainMenu(&library, user);
 
   printf("Au revoir et à bientôt ! Parce que lire c'est grandir !\n");
-
 
   bookFile = fopen("./books.csv", "w");
   userFile = fopen("./users.csv", "w");

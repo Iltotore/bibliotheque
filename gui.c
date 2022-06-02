@@ -9,16 +9,6 @@
 #define FOCUS_STYLE "\x1b[1m"
 #define FOCUS_RESET "\x1b[0m"
 
-//Return a string representation of the given Category.
-char* categoryToString(Category category) {
-  switch (category) {
-    case SCIENCES: return "Sciences";
-    case LITERATURE: return "Literature";
-    case FICTION: return "Fiction";
-    case GENERAL_KNOWLEDGE: return "Culture Generale";
-  }
-}
-
 //Extend a string using the given char sequence `str`.
 char* completeWithString(char* base, int length, char* str) {
   int currentLength = strlen(base);
@@ -28,7 +18,6 @@ char* completeWithString(char* base, int length, char* str) {
   strcat(result, base);
 
   int step = strlen(str);
-  int allocated = currentLength+1;
   for(int i = 0; i < length-currentLength; i+=step) strcat(result, str);
   return result;
 }
@@ -92,6 +81,18 @@ void showBooks(Book books[], int length, Field focused) {
   }
 
   printf("%s\n", completeWithString("", totalLength+1, "-"));
+}
+
+//Ask the user to enter a string (char*).
+char* askString(char* message, int maxLength) {
+  char* answer = safeMalloc(sizeof(char)*(maxLength+1));
+  printf("%s\n", message);
+  char* format = safeMalloc(sizeof(char)*(5 + lengthOfInt(maxLength)));
+  sprintf(format, "%%%d[^\n]", maxLength);
+  scanf(format, answer);
+  clear(stdin);
+
+  return answer;
 }
 
 //Ask the user to select one of the given choices (represented by an int).
