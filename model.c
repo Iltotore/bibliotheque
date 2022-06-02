@@ -27,7 +27,7 @@ User* authenticateUser(Library library, char* login, char* password) {
 User* registerUser(Library* library, char* login, char* password) {
   int newCount = library->userCount+1;
   User* users = safeMalloc(sizeof(User)*newCount);
-  for(int i = 0; i < newCount; i++) users[i] = library->users[i];
+  for(int i = 0; i < newCount-1; i++) users[i] = library->users[i];
 
   User registered;
   registered.login = login;
@@ -120,5 +120,4 @@ void addBook(Library* library,Book book) {
 
   library->books = books;
   library->bookCount = newCount;
-
 }
