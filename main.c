@@ -8,7 +8,7 @@
 
 #define UPPERS "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define LOWERS "abcdefghijklmnopqrstuvwxyz"
-#define DIGITS "123456789"
+#define DIGITS "0123456789"
 
 
 //Login sub menu.
@@ -246,10 +246,8 @@ void mainMenu(Library* library, User* user) {
   Field focused = NO_FIELD;
   do{
     system("clear");
-      printf("Vous ai-je déjà lu quelque part\n");
     showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
-    printf("Vous ai-je déjà lu quelque part ?\n\n");
-    if(result != NULL) printf("> %s\n", result);
+    printf("> %s\n", result == NULL ? "Vous ai-je déjà lu quelque part ?\n" : result);
     action = askInt("Sélectionnez une action", choices, 4);
     switch (action) {
       case 0:
@@ -276,9 +274,7 @@ void adminMainMenu(Library* library, User* user) {
   do{
     system("clear");
     showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
-    printf("Vous ai-je déjà lu quelque part ?\n\n");
-    
-    if(result != NULL) printf("> %s\n", result);
+    printf("> %s\n", result == NULL ? "Vous ai-je déjà lu quelque part ?" : result);
     action = askInt("Sélectionnez une action", choices, 9);
     switch (action) {
       case 0:
