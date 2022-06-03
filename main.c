@@ -129,7 +129,6 @@ char* deliverMenu(Library library, User* user) {
 
   do {
     showBooks(borrowed, length, NO_FIELD);
-    printf("Vous ai-je déjà lu quelque part ?\n\n");
 
     int id;
     printf("Entrez l'ID du livre à rendre.\n");
