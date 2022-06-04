@@ -83,15 +83,19 @@ void showBooks(Book books[], int length, Field focused) {
   printf("%s\n", completeWithString("", totalLength+1, "-"));
 }
 
-//Ask the user to enter a string (char*).
+//Ask the user to enter a string (char*). This function allocates one more char to test correct length.
 char* askString(char* message, int maxLength) {
-  char* answer = safeMalloc(sizeof(char)*(maxLength+1));
-  printf("%s\n", message);
-  char* format = safeMalloc(sizeof(char)*(5 + lengthOfInt(maxLength)));
-  sprintf(format, "%%%d[^\n]", maxLength);
-  scanf(format, answer);
-  clear(stdin);
+  char* format = safeMalloc(sizeof(char)*(5 + lengthOfInt(maxLength+1)));
 
+  char* answer = safeMalloc(sizeof(char)*(maxLength+2));
+  do {
+    printf("%s\n", message);
+    sprintf(format, "%%%d[^\n]", maxLength+1);
+    scanf(format, answer);
+    clear(stdin);
+
+    if(strlen(answer) > maxLength) printf("Votre réponse est trop longue (max: %d).\n", maxLength);
+  } while(strlen(answer) > maxLength);
   return answer;
 }
 
