@@ -217,7 +217,7 @@ char* categoryToString(Category category) {
   }
 }
 
-//
+//Return the string representation of the given Field.
 char* fieldToString(Field field) {
   switch (field) {
     case TITLE: return "Titre";
