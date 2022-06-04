@@ -247,7 +247,7 @@ void mainMenu(Library* library, User* user) {
   do{
     system("clear");
     showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
-    printf("> %s\n", result == NULL ? "Vous ai-je déjà lu quelque part ?\n" : result);
+    printf("> %s\n", result == NULL ? "Vous ai-je déjà lu quelque part ?" : result);
     action = askInt("Sélectionnez une action", choices, 4);
     switch (action) {
       case 0:
