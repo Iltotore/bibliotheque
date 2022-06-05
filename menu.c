@@ -271,19 +271,19 @@ void mainMenu(Library* library, User* user) {
     action = askInt("Sélectionnez une action", choices, 5);
     switch (action) {
       case 0:
-       result = sortMenu(&focused);
-       break;
+        result = sortMenu(&focused);
+        break;
       case 1:
-       result = filterMenu(&filter);
-       break;
+        result = filterMenu(&filter);
+        break;
       case 2:
-      result = borrowMenu(*library, user);
-      break;
+        result = borrowMenu(*library, user);
+        break;
       case 3:
-      result = deliverMenu(*library, user);
-      break;
+        result = deliverMenu(*library, user);
+        break;
       case 4:
-      break;
+        break;
     }
   }while(action != 4);
 }
@@ -308,25 +308,25 @@ void teacherMainMenu(Library* library, User* user) {
     action = askInt("Sélectionnez une action", choices, 7);
     switch (action) {
       case 0:
-       result = sortMenu(&focused);
-       break;
+        result = sortMenu(&focused);
+        break;
       case 1:
-       result = filterMenu(&filter);
-       break;
+        result = filterMenu(&filter);
+        break;
       case 2:
-      result = borrowMenu(*library, user);
-      break;
+        result = borrowMenu(*library, user);
+        break;
       case 3:
-      result = deliverMenu(*library, user);
-      break;
+        result = deliverMenu(*library, user);
+        break;
       case 4:
-      result = addMenu(library);
-      break;
+        result = addMenu(library);
+        break;
       case 5:
-      result = removeMenu(library);
-      break;
+        result = removeMenu(library);
+        break;
       case 6:
-      break;
+        break;
     }
   }while(action != 6);
 }
@@ -351,34 +351,34 @@ void adminMainMenu(Library* library, User* user) {
     action = askInt("Sélectionnez une action", choices, 10);
     switch (action) {
       case 0:
-       result = sortMenu(&focused);
-       break;
+        result = sortMenu(&focused);
+        break;
       case 1:
-       result = filterMenu(&filter);
-       break;
+        result = filterMenu(&filter);
+        break;
       case 2:
-      result = borrowMenu(*library, user);
+        result = borrowMenu(*library, user);
       break;
       case 3:
-      result = deliverMenu(*library, user);
+        result = deliverMenu(*library, user);
       break;
       case 4:
-      result = addMenu(library);
-      break;
+        result = addMenu(library);
+        break;
       case 5:
-      result = removeMenu(library);
-      break;
+        result = removeMenu(library);
+        break;
       case 6:
-      result = banMenu(*library,user->login);
-      break;
+        result = banMenu(*library,user->login);
+        break;
       case 7:
-      result = mercyMenu(*library);
-      break;
+        result = mercyMenu(*library);
+        break;
       case 8:
-      result = promoteMenu(*library, user->login);
-      break;
+        result = promoteMenu(*library, user->login);
+        break;
       case 9:
-      break;
+        break;
     }
   }while(action != 9);
 }
