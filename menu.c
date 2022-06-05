@@ -251,7 +251,7 @@ char* promoteMenu(Library library, char* current) {
   return "L'utilisateur a bien été promu";
 }
 
-//Main menu (students and teachers).
+//Main menu (students).
 void mainMenu(Library* library, User* user) {
   char* choices[5]={"Trier les livres", "Filtrer les livres", "Emprunter un livre", "Rendre un livre", "Quitter"};
   int action;
@@ -288,9 +288,52 @@ void mainMenu(Library* library, User* user) {
   }while(action != 4);
 }
 
+//Main menu (teachers).
+void teacherMainMenu(Library* library, User* user) {
+  char* choices[7]={"Trier les livres", "Filtrer les livres", "Emprunter un livre","Rendre un livre","Ajouter un livre","Supprimer un livre","Quitter"};
+  int action;
+  char* result = NULL;
+  Field focused = NO_FIELD;
+  Filter filter;
+  filter.field = NO_FIELD;
+  filter.input = "";
+  do{
+    system("clear");
+    int n;
+    Book* books = filterBooks(library->books, library->bookCount, filter, &n);
+    showBooks(sortBooks(books, n, focused), n, focused);
+    printf("> %s\n", result == NULL ? "Vous ai-je déjà lu quelque part ?" : result);
+    if(filter.field == NO_FIELD) printf("Filtre: Aucun\n");
+    else printf("Filtre: %s, \"%s\"\n", fieldToString(filter.field), filter.input);
+    action = askInt("Sélectionnez une action", choices, 7);
+    switch (action) {
+      case 0:
+       result = sortMenu(&focused);
+       break;
+      case 1:
+       result = filterMenu(&filter);
+       break;
+      case 2:
+      result = borrowMenu(*library, user);
+      break;
+      case 3:
+      result = deliverMenu(*library, user);
+      break;
+      case 4:
+      result = addMenu(library);
+      break;
+      case 5:
+      result = removeMenu(library);
+      break;
+      case 6:
+      break;
+    }
+  }while(action != 6);
+}
+
 //Main menu (administrators).
 void adminMainMenu(Library* library, User* user) {
-  char* choices[10]={"Trier les livres", "Filtrer les livres", "Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
+  char* choices[10]={"Trier les livres", "Filtrer les livres", "Emprunter un livre","Rendre un livre","Ajouter un livre","Supprimer un livre","Bannir un utilisateur","Réabiliter un utilisateur","Promouvoir un utilisateur","Quitter"};
   int action;
   char* result = NULL;
   Field focused = NO_FIELD;
@@ -320,16 +363,16 @@ void adminMainMenu(Library* library, User* user) {
       result = deliverMenu(*library, user);
       break;
       case 4:
-      result = banMenu(*library,user->login);
-      break;
-      case 5:
-      result = mercyMenu(*library);
-      break;
-      case 6:
       result = addMenu(library);
       break;
-      case 7:
+      case 5:
       result = removeMenu(library);
+      break;
+      case 6:
+      result = banMenu(*library,user->login);
+      break;
+      case 7:
+      result = mercyMenu(*library);
       break;
       case 8:
       result = promoteMenu(*library, user->login);

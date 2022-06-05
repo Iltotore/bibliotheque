@@ -32,8 +32,16 @@ int main() {
     break;
   }
 
-  if(user->role == ADMINISTRATOR) adminMainMenu(&library, user);
-  else mainMenu(&library, user);
+  switch (user->role) {
+    case STUDENT:
+      mainMenu(&library, user);
+      break;
+    case TEACHER:
+      teacherMainMenu(&library, user);
+      break;
+    case ADMINISTRATOR:
+      adminMainMenu(&library, user);
+  }
 
   printf("Au revoir et à bientôt ! Parce que lire c'est grandir !\n");
 

@@ -39,6 +39,9 @@ char* promoteMenu(Library library, char* current);
 //Main menu (students and teachers).
 void mainMenu(Library* library, User* user);
 
+//Main menu (teachers).
+void teacherMainMenu(Library* library, User* user);
+
 //Main menu (administrators).
 void adminMainMenu(Library* library, User* user);
 

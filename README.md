@@ -33,9 +33,9 @@ Voici un récapitulatif des différentes fonctionnalités du projet:
 |---------------------------|----------|------------|----------------|
 | Trier les livres          |✅        |✅         |✅              |
 | Emprunter un livre        |✅        |✅         |✅              |
-| Remettre un livre         |✅        |✅         |✅              |
+| Rendre un livre           |✅        |✅         |✅              |
+| Ajouter un livre          |           |✅         |✅             |
+| Supprimer un livre        |           |✅         |✅             |
 | Bannir un utilisateur     |           |           |✅              |
 | Débannir un utilisateur   |           |           |✅              |
-| Ajouter un livre          |           |           |✅              |
-| Supprimer un livre        |           |           |✅              |
 | Promouvoir un utilisateur |           |           |✅              |
