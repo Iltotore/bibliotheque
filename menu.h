@@ -12,6 +12,9 @@ User* registerMenu(Library* library);
 //Book sort sub menu.
 char* sortMenu(Field* field);
 
+//Change filter sub menu
+char* filterMenu(Filter* filter);
+
 //Borrow sub menu.
 char* borrowMenu(Library library, User* user);
 

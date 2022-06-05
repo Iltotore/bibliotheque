@@ -47,6 +47,11 @@ typedef enum {
 	NO_FIELD
 } Field;
 
+typedef struct {
+	Field field;
+	char* input;
+} Filter;
+
 //Represent a Library. A Library contains an array of Users and an array of Book;
 typedef struct {
 	Book* books;
@@ -93,6 +98,9 @@ int compareBooks(Book a, Book b, Field field);
 
 //Sort an array of book by a particular field. Return a new array.
 Book* sortBooks(Book* books, int length, Field field);
+
+//Filter the given book array. Return a new array.
+Book* filterBooks(Book* books, int length, Filter filter, int* resultLength);
 
 //Return the string representation of the given Category.
 char* categoryToString(Category category);

@@ -33,16 +33,16 @@ void clear(FILE* stream){
 }
 
 //Renvoie true si la chaine de caractère `str` contient la chaine `part`
-bool strcontains(char* str, char* part) {
+bool strContains(char* str, char* part) {
   int strLength = strlen(str);
   int partLength = strlen(part);
   int matching = 0;
 
-  for(int i = 0; i < strLength - partLength || matching == partLength; i++) {
+  for(int i = 0; i < strLength && matching != partLength; i++) {
     if(str[i] == part[matching]) matching++;
     else matching = 0;
   }
-
+  
   return matching == partLength;
 }
 

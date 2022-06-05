@@ -95,6 +95,19 @@ char* sortMenu(Field* field) {
   return "Livres triés.";
 }
 
+//Change filter sub menu
+char* filterMenu(Filter* filter) {
+  char* choices[7];
+  for(int i=0;i<7;i++){
+    choices[i]= fieldToString((Field) i);
+  }
+
+  filter->field = (Field) askInt("Par quel attribut voulez-vous filtrer les livres ?",choices,7);
+  filter->input = filter->field == NO_FIELD ? "" : askString("Entrez votre filtre", 100);
+
+  return "Le nouveau filtre a bien été appliqué.";
+}
+
 //Borrow sub menu.
 char* borrowMenu(Library library, User* user) {
   if(remaining(library, user) == 0) return "Vous ne pouvez pas emprunter plus de livre !";
@@ -240,69 +253,89 @@ char* promoteMenu(Library library, char* current) {
 
 //Main menu (students and teachers).
 void mainMenu(Library* library, User* user) {
-  char* choices[4]={"Trier les livres", "Emprunter un livre", "Rendre un livre", "Quitter"};
+  char* choices[5]={"Trier les livres", "Filtrer les livres", "Emprunter un livre", "Rendre un livre", "Quitter"};
   int action;
   char* result = NULL;
   Field focused = NO_FIELD;
+  Filter filter;
+  filter.field = NO_FIELD;
+  filter.input = "";
   do{
     system("clear");
-    showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
+    int n;
+    Book* books = filterBooks(library->books, library->bookCount, filter, &n);
+    showBooks(sortBooks(books, n, focused), n, focused);
     printf("> %s\n", result == NULL ? "Vous ai-je déjà lu quelque part ?" : result);
-    action = askInt("Sélectionnez une action", choices, 4);
+    if(filter.field == NO_FIELD) printf("Filtre: Aucun\n");
+    else printf("Filtre: %s, \"%s\"\n", fieldToString(filter.field), filter.input);
+    action = askInt("Sélectionnez une action", choices, 5);
     switch (action) {
       case 0:
        result = sortMenu(&focused);
        break;
       case 1:
+       result = filterMenu(&filter);
+       break;
+      case 2:
       result = borrowMenu(*library, user);
       break;
-      case 2:
+      case 3:
       result = deliverMenu(*library, user);
       break;
-      case 3:
+      case 4:
       break;
     }
-  }while(action != 3);
+  }while(action != 4);
 }
 
 //Main menu (administrators).
 void adminMainMenu(Library* library, User* user) {
-  char* choices[9]={"Trier les livres", "Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
+  char* choices[10]={"Trier les livres", "Filtrer les livres", "Emprunter un livre","Rendre un livre","Bannir un utilisateur","Réabiliter un utilisateur","Ajouter un livre","Supprimer un livre","Promouvoir un utilisateur","Quitter"};
   int action;
   char* result = NULL;
   Field focused = NO_FIELD;
+  Filter filter;
+  filter.field = NO_FIELD;
+  filter.input = "";
   do{
     system("clear");
-    showBooks(sortBooks(library->books, library->bookCount, focused), library->bookCount, focused);
+    int n;
+    Book* books = filterBooks(library->books, library->bookCount, filter, &n);
+    showBooks(sortBooks(books, n, focused), n, focused);
     printf("> %s\n", result == NULL ? "Vous ai-je déjà lu quelque part ?" : result);
-    action = askInt("Sélectionnez une action", choices, 9);
+    if(filter.field == NO_FIELD) printf("Filtre: Aucun\n");
+    else printf("Filtre: %s, \"%s\"\n", fieldToString(filter.field), filter.input);
+    action = askInt("Sélectionnez une action", choices, 10);
     switch (action) {
       case 0:
        result = sortMenu(&focused);
        break;
       case 1:
+       result = filterMenu(&filter);
+       break;
+      case 2:
       result = borrowMenu(*library, user);
       break;
-      case 2:
+      case 3:
       result = deliverMenu(*library, user);
       break;
-      case 3:
+      case 4:
       result = banMenu(*library,user->login);
       break;
-      case 4:
+      case 5:
       result = mercyMenu(*library);
       break;
-      case 5:
+      case 6:
       result = addMenu(library);
       break;
-      case 6:
+      case 7:
       result = removeMenu(library);
       break;
-      case 7:
+      case 8:
       result = promoteMenu(*library, user->login);
       break;
-      case 8:
+      case 9:
       break;
     }
-  }while(action != 8);
+  }while(action != 9);
 }

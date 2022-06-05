@@ -206,6 +206,43 @@ Book* sortBooks(Book* books, int length, Field field) {
   return sorted;
 }
 
+//Apply filter to a single Book. Return true if the given Book satisfies the filter.
+bool applyFilter(Book book, Filter filter) {
+  switch (filter.field) {
+    case TITLE: return strContains(book.title, filter.input);
+    case AUTHOR: return strContains(book.author, filter.input);
+    case ID: {
+      char* asString = safeMalloc(sizeof(char)*(lengthOfInt(book.id)+1));
+      sprintf(asString, "%d", book.id);
+      return strContains(asString, filter.input);
+    }
+    case CATEGORY: return strContains(categoryToString(book.category), filter.input);
+    case BORROWER:
+      if(book.borrower == NULL) return strlen(filter.input) == 0;
+      return strContains(book.borrower->login, filter.input);
+    case DELIVERY_DATE:
+      if(book.borrower == NULL) return strlen(filter.input) == 0;
+      char formattedTime[15];
+      strftime(formattedTime, 15, "%D %R", book.deliveryDate);
+      return strContains(formattedTime, filter.input);
+    default:
+      return true;
+  }
+}
+
+//Filter the given book array. Return a new array.
+Book* filterBooks(Book* books, int length, Filter filter, int* resultLength) {
+  Book* result = safeMalloc(sizeof(Book)*length);
+  *resultLength = 0;
+  for(int i = 0; i < length; i++) {
+    if(applyFilter(books[i], filter)) {
+      result[*resultLength] = books[i];
+      (*resultLength)++;
+    }
+  }
+  return result;
+}
+
 //Return a string representation of the given Category.
 char* categoryToString(Category category) {
   switch (category) {
